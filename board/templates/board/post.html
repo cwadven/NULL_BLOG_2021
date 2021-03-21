@@ -1,0 +1,265 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block script %}
+<link rel="stylesheet" href="{% static 'ckeditor/ckeditor/plugins/codesnippet/lib/highlight/styles/default.css' %}" />
+<script src="{% static 'ckeditor/ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js' %}"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script>
+$(function () {
+    $('.reply-form').on('submit', function(e){
+        if ("False" === "{{user.is_authenticated}}") {
+            alert("로그인 후, 이용해주세요!");
+            return false;
+        }
+    });
+
+    $('.reply_call').click(function(e){
+        let parent = e.currentTarget.offsetParent.children[0];
+        if (document.getElementById('rereply')) {
+            // 있으면 다 지우기
+            $('#rereply').remove();
+            // 다른 곳 작성할 경우
+            if (parent.children.length < 4){
+                rereply_form_create(e);
+            }
+        } else {
+            rereply_form_create(e);
+        }
+        $('.rereply-form').on('submit', function(e){
+            if ("False" === "{{user.is_authenticated}}") {
+                alert("로그인 후, 이용해주세요!");
+                return false;
+            }
+        });
+    });
+
+    $('.reply_del').click(function(e){
+        if(confirm("댓글을 삭제하시겠습니까?")){
+            if ("False" === "{{user.is_authenticated}}") {
+                alert("로그인 후, 이용해주세요!");
+            } else {
+                reply_delete(e);
+            }
+        }
+    });
+
+    $('.rereply_del').click(function(e){
+        if(confirm("답글을 삭제하시겠습니까?")){
+            if ("False" === "{{user.is_authenticated}}") {
+                alert("로그인 후, 이용해주세요!");
+            } else {
+                rereply_delete(e);
+            }
+        }
+    });
+});
+
+rereply_form_create = (e) => {
+    let parent = e.currentTarget.offsetParent.children[0];
+    const reply = document.createElement("div");
+    reply.setAttribute("id", "rereply");
+    reply.setAttribute("class", "mt-2 py-1");
+    // 답글 버튼 공간 만들기
+    const reply_submit = document.createElement("div");
+    reply_submit.setAttribute("class", "text-end");
+    // 폼 만들기
+    const form = document.createElement("form");
+    form.setAttribute("class", "rereply-form");
+    form.method = "POST";
+    form.action = "{% url 'board:rereply' post.board_id.url '00000' %}".replace('00000', parent.id.replace('reply_',''));
+    // 쓸 곳 만들기
+    const body_input = document.createElement("textarea");
+    body_input.setAttribute("name", "rereply");
+    body_input.setAttribute("class", "form-control mb-2");
+    body_input.required = true;
+    // csrf
+    const inputElem = document.createElement('input');
+    inputElem.type = 'hidden';
+    inputElem.name = 'csrfmiddlewaretoken';
+    inputElem.value = '{{ csrf_token }}';
+    // 버튼 만들기
+    const submit = document.createElement("input")
+    submit.setAttribute("class", "btn btn-secondary fw-bolder");
+    submit.type = "submit"
+    submit.value = "답글 작성"
+    // 버튼 공간에 버튼 넣기
+    reply_submit.appendChild(submit);
+    // 폼에 쓸 것과 버튼 추가하기
+    form.appendChild(body_input);
+    form.appendChild(inputElem);
+    form.appendChild(reply_submit);
+
+    reply.appendChild(form)
+    parent.appendChild(reply);
+}
+
+reply_delete = (e) => {
+    let parent = e.currentTarget.offsetParent.children[0];
+    $(location).attr('href', "{% url 'board:reply_delete' post.board_id.url '00000' %}".replace('00000', parent.id.replace('reply_','')));
+}
+
+rereply_delete = (e) => {
+    $(location).attr('href', "{% url 'board:rereply_delete' post.board_id.url '00000' %}".replace('00000', e.target.id.replace('rereply_','')));
+}
+
+
+</script>
+{% endblock %}
+
+{% block style %}
+<style>
+.reply_call:hover {
+    cursor: pointer;   
+}
+
+.reply_del:hover {
+    cursor: pointer;   
+}
+
+.rereply_del:hover {
+    cursor: pointer;   
+}
+</style>
+{% endblock %}
+
+{% block title %}NULL 게시글{% endblock %}
+
+{% block middle_left %}
+<!-- 글 title -->
+<h3>{{post.title}}</h3>
+<!-- 글 작성자 / 생성일자 -->
+<div class="mb-2 text-muted">
+    <i class="bi bi-person-circle"></i> {{post.author.nickname}} <i class="bi bi-calendar-week"></i> {{post.created_at|date:"Y-m-d"}}</small>
+</div>
+<!-- 글 body -->
+<div class="mb-2">
+    {{post.body|safe}}
+</div>
+<!-- 강조 url -->
+<div class="my-3">
+    {% if post.urlimportants.exists %}
+        <div class="fw-bolder">URL</div>
+        {% for urlimportant in post.urlimportants.all %}
+            <a href="{{urlimportant.url}}">{{urlimportant.url}}</a>
+        {% endfor %}
+    {% endif %}
+</div>
+<!-- 좋아요 / 댓글 수 -->
+<div class="mb-2">
+    <i class="bi bi-heart text-danger"></i></i> {{post.like_count}} <i class="bi bi-chat-right-text"></i> {{post.reply_count}}
+</div>
+<div class="text-center my-3">
+    <a href="{% url 'board:like' post.board_id.url post.id %}" class="d-inline text-center border p-2 rounded text-decoration-none text-dark fw-bolder">
+        {% if like_check %}
+        <i class="bi bi-heart-fill text-danger"></i>
+        {% else %}
+        <i class="bi bi-heart text-danger"></i>
+        {% endif %}
+        좋아요
+    </a>
+</div>
+<!-- 태그 -->
+<div class="mb-2">
+    {% for tag in post.tag_set.all %}
+    <a href="{% url 'board:tag_board' tag.tag_name %}" class="text-decoration-none">#{{tag.tag_name}}</a>
+    {% endfor %}
+</div>
+<!-- 댓글 작성 -->
+<div class="mb-3">
+    <form class="reply-form" method="POST" action="{% url 'board:reply' post.board_id.url post.id %}">
+        {% csrf_token %}
+        <div class="mb-2 form-floating">
+            <textarea name="reply_body" class="form-control" placeholder="댓글을 작성하세요!" id="floatingTextarea" style="height: 150px" required></textarea>
+            <label for="floatingTextarea">댓글작성</label>
+        </div>
+        <div class="mb-2 text-end">
+            <input class="btn btn-secondary fw-bolder" type="submit" value="댓글 작성"/>
+        </div>
+    </form>
+</div>
+<!-- 댓글 + 대댓글 -->
+<div class="mb-2">
+    <!-- 댓글 -->
+    {% for reply in post.replys.all %}
+    <div class="card mb-3">
+        <div id="reply_{{reply.id}}" class="row g-0 my-1">
+            <div class="text-end pe-2">
+                {% if user.is_authenticated %}
+                <i class="reply_call bi bi-reply-fill"></i>
+                    {% if request.user == reply.author or request.user.is_superuser %}
+                    <i class="reply_del bi bi-trash-fill"></i>
+                    {% endif %}
+                {% endif %}
+            </div>
+            <div class="col-2 align-self-center text-center">
+                {% if reply.author.user_img %}
+                <img class="img-thumbnail align-middle" style="max-width:70px;max-height: 70px;" src="{{reply.author.user_img.url}}" alt="{{reply.author.nickname}}">
+                {% else %}
+                <img class="img-thumbnail align-middle" style="max-width:70px;max-height: 70px;" src="{% static 'noimage.jpg' %}" alt="{{reply.author.nickname}}">
+                {% endif %}
+                <div>{{reply.author.nickname}}</div>
+            </div>
+            <div class="col-10">
+                <div class="p-1">
+                    <div class="card-text mb-1">{{reply.body}}</div>
+                    <div class="card-text"><small class="text-muted">{{reply.created_at|date:'Y-m-d'}}</small></div>
+                </div>
+            </div>
+        </div>
+        {% for rereply in reply.rereplys.all %}
+        <div class="row g-0 my-1">
+            <div class="text-end pe-2">
+                {% if user.is_authenticated %}
+                    {% if request.user == rereply.author or request.user.is_superuser %}
+                    <i id="rereply_{{rereply.id}}" class="rereply_del bi bi-trash-fill"></i>
+                    {% endif %}
+                {% endif %}
+            </div>
+            <div class="col-1 align-self-center text-center"><i class="bi bi-arrow-return-right"></i></div>
+            <div class="col-2 align-self-center text-center">
+                {% if rereply.author.user_img %}
+                <img class="img-thumbnail align-middle" style="max-width:70px;max-height: 70px;" src="{{rereply.author.user_img.url}}" alt="{{rereply.author.nickname}}">
+                {% else %}
+                <img class="img-thumbnail align-middle" style="max-width:70px;max-height: 70px;" src="{% static 'noimage.jpg' %}" alt="{{rereply.author.nickname}}">
+                {% endif %}
+                <div>{{rereply.author.nickname}}</div>
+            </div>
+            <div class="col-9">
+                <div class="p-1">
+                    <div class="card-text mb-1">{{rereply.body}}</div>
+                    <div class="card-text"><small class="text-muted">{{rereply.created_at|date:'Y-m-d'}}</small></div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
+
+{% block middle_right %}
+<!-- 게시판 소개 -->
+<div class="p-4 bg-light rounded mb-2">
+    <h5>{{post.board_id.name}}</h5>
+    <div>{{post.board_id.info}}</div>
+</div>
+<!-- 다른 게시판에 있는 게시글 목록 최신 -->
+<div class="card">
+    <div class="card-header">
+        {{post.board_id.name}} 최신 목록
+    </div>
+    <ul class="list-group">
+        {% for list_post in qs|slice:'0:5' %}
+        {% if post.id == list_post.id %}
+        <a href="{% url 'board:post' list_post.board_id.url list_post.pk %}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center active">
+        {% else %}
+        <a href="{% url 'board:post' list_post.board_id.url list_post.pk %}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+        {% endif %}
+            {{list_post.title}}
+            <span class="badge bg-primary rounded-pill">{{list_post.reply_count}}</span>
+        </a>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

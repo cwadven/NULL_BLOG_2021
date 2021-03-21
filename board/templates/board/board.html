@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block style %}
+<style>
+.card_img{
+    background-repeat:no-repeat;
+    background-position-y:center;
+    background-size:contain;
+}
+</style>
+{% endblock %}
+
+{% block title %}{{board.name}} 게시판{% endblock %}
+
+{% block top %}
+<!-- 게시판 소개 및 이미지 -->
+{% if board.board_img %}
+<div class="p-4 p-md-5 mb-3 text-white rounded" style="background-image:url({{board.board_img.url}});background-size:cover;background-position:center center;">
+{% else %}
+<div class="p-4 p-md-5 mb-3 rounded">
+{% endif %}
+    <div class="col-md-8 px-0">
+        <h3 class="display-4">{{board.name}}</h3>
+        <p class="lead my-3">{{board.info}}</p>
+    </div>
+    {% if tag_board %}
+    <div class="col-md-8 px-0">
+        <h3 class="display-4 font-monospace">#{{tag_board.tag_name}}</h3>
+        <p class="lead my-3 font-monospace">WHAT WE TAGS {{tag_board.tag_name}} LIST</p>
+    </div>
+    {% endif %}
+</div>
+<!-- 글 목록 -->
+<div class="row g-2 mb-4">
+    {% for post in posts %}
+    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+        <a class="text-decoration-none text-dark" href="{% url 'board:post' post.board_id.url post.pk %}">
+            <div class="card">
+                <div class="row g-0">
+                    <div class="col-lg-8">
+                        <div class="card-body">
+                            <h5 class="card-title" style="white-space:nowrap;overflow: hidden;text-overflow:ellipsis;">{{post.title}}</h5>
+                            <p class="card-text">{{post.short_title}}</p>
+                            <div class="card-text"><small class="text-muted"><i class="bi bi-person-circle"></i> {{post.author.nickname}}</small></div>
+                            <div class="card-text"><small class="text-muted"><i class="bi bi-calendar-week"></i> {{post.created_at|date:"Y-m-d"}}</small></div>
+                            <div>
+                                <i class="bi bi-heart text-danger"></i></i> {{post.like_count}} <i class="bi bi-chat-right-text"></i> {{post.reply_count}}
+                            </div>
+                        </div>
+                    </div>
+                    {% if post.post_img %}
+                    <div class="col-lg-4 card_img d-none d-lg-block rounded" style="background-image:url({{post.post_img.url}});">
+                    {% else %}
+                    <div class="col-lg-4 card_img d-none d-lg-block rounded" style="background-image:url({% static 'noimage.jpg' %});">
+                    {% endif %}
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+    {% endfor %}
+</div>
+<!-- 페이지 네이션 -->
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+        {%if posts.has_previous%}
+        <li class="page-item">
+        <a class="page-link" href="?page=1" aria-label="First">
+            <span aria-hidden="true">&laquo;</span>
+        </a>
+        </li>
+        <li class="page-item">
+        <a class="page-link" href="?page={{posts.previous_page_number}}" aria-label="Previous">
+            <span aria-hidden="true">&lt;</span>
+        </a>
+        </li>
+        {%endif%}
+
+        {% for i in page_range %}
+        {% if i == posts.number %}
+        <li class="page-item active"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+        {% else %}
+        <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+        {% endif %}
+        {% endfor %}
+
+        {%if posts.has_next%}
+        <li class="page-item">
+        <a class="page-link" href="?page={{posts.next_page_number}}" aria-label="Next">
+            <span aria-hidden="true">&gt;</span>
+        </a>
+        </li>
+        <li class="page-item">
+        <a class="page-link" href="?page={{posts.paginator.num_pages}}" aria-label="Last">
+            <span aria-hidden="true">&raquo;</span>
+        </a>
+        </li>
+        {%endif%}
+    </ul>
+</nav>
+{% endblock %}

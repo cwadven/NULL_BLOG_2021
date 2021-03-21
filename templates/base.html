@@ -1,0 +1,170 @@
+{% load static %}
+{% load socialaccount %}
+
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{%block title%}{% endblock %}</title>
+    <meta property="og:title" content="NULL's 블로그" />
+    <meta property="og:description" content="천방지축 NULL이 잡다한 IT 자료를 올리는 블로그" />
+    <meta property="og:type" content="website" />
+    <!-- <meta property="og:url" content="도메인" />
+    <meta property="og:image" content="도메인" /> -->
+    <link rel="icon" href="{% static 'logo.ico' %}">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.6.0/dist/umd/popper.min.js" integrity="sha384-KsvD1yqQ1/1+IA7gi3P0tyJcT3vR+NdBTt13hSJ2lnve8agRGXTTyNaBYmCR/Nwi" crossorigin="anonymous"></script>
+    <!-- ajax -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.min.js" integrity="sha384-nsg8ua9HAw1y0W1btsyWgBklPnCUAFLuTMS2G72MMONqmOymq585AcH49TLBQObG" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.0/font/bootstrap-icons.css">
+    <script>
+    $(function () {
+        $('.login-form').on('submit', function(e){
+            AjaxLogin(e);
+        });
+
+        $('#logo').click(function(e){
+            $(location).attr('href', location.origin);
+        })
+    });
+
+    AjaxLogin = (e) => {
+        e.preventDefault();
+        // 백엔드 서버에 요청
+        var request = $.ajax({
+            method: 'POST',
+            // html 맨 위에 설정한 urls
+            url: "{% url 'accounts:login' %}",
+            async: false,
+            data: $('.login-form').serialize()
+        });
+        request.done(function (data){
+            if (data.works){
+                $(location).attr('href', location.origin);
+            } else {
+                $('#error_message').html(data.error_message);
+            }
+        });
+        request.fail(function (jqXHR, textStatus){
+            if (jqXHR.status == 404){
+                alert("페이지가 존재하지 않습니다.");
+            } else if (jqXHR.status == 403) {
+                alert("로그인 해주세요.");
+            } else {
+                alert("문제가 발생했습니다. 다시 시도해주세요.");
+            }
+        });
+        return false;
+    }
+    </script>
+    {% block script %}
+    {% endblock %}
+
+    <style>
+    #logo:hover {
+        cursor: pointer;   
+    }
+    </style>
+
+    {% block style %}
+    {% endblock %}
+</head>
+<body class="d-flex flex-column h-100">
+    <div class="container">
+        <div class="row flex-nowrap justify-content-between align-items-center py-2 border-bottom">
+            <div class="col-4"></div>
+            <div id="logo" class="col-4 text-center fs-2 fw-bolder">NULL's BLOG</div>
+            <div class="col-4 d-flex justify-content-end align-items-center">
+                <!-- Button trigger modal -->
+                {% if user.is_authenticated %}
+                <a href="{% url 'accounts:logout' %}" class="btn btn-sm btn-light">로그아웃</a>
+                {% else %}
+                <button type="button" class="btn btn-sm btn-light me-1 mt-0" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                    로그인
+                </button>
+                <a href="{% url 'accounts:signup' %}" class="btn btn-sm btn-light">회원가입</a>
+                {% endif %}
+            </div>
+        </div>
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                    <ul class="navbar-nav">
+                        {% for board in nav_board %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'board:board' board.url %}">{{board.name}}</a>
+                        </li>
+                        {% endfor %}
+                        {% for group in nav_group %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            {{group.group_name}}
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                {% for boards in group.board_set.all %}
+                                <li><a class="dropdown-item" href="{% url 'board:board' boards.url %}">{{boards.name}}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="row">
+            <div class="col-12 mb-3">{% block top %}{% endblock %}</div>
+            <div class="col-sm-12 col-md-7 col-lg-8 col-xl-8 col-xxl-9">{% block middle_left %}{% endblock %}</div>
+            <div class="col-sm-12 col-md-5 col-lg-4 col-xl-4 col-xxl-3">{% block middle_right %}{% endblock %}</div>
+        </div>
+    </div>
+    <footer class="footer mt-auto py-3 bg-light">
+        <div class="container text-center">
+            <div class="text-muted fs-6">Contact : Email - BLANK</div>
+            <div class="text-muted fs-6">© 2021 NULL's LIFE. All rights reserved</div>
+        </div>
+    </footer>
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">로그인</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <div class="fw-bold mb-2">일반 로그인</div>
+                    <form class="login-form" mehtod="POST" action="">
+                        {% csrf_token %}
+                        <input class="form-control mb-2" type="text" name="username" placeholder="아이디"/>
+                        <input class="form-control mb-2" type="password" name="password" placeholder="비밀번호"/>
+                        <div class="d-grid gap-2">
+                            <input class="btn text-white" style="background-color: rgb(82, 121, 250);" type="submit" value="로그인"/>
+                        </div>
+                    </form>
+                </div>
+                <div id="error_message" class="alert alert-danger text-center" role="alert">로그인 해주세요!</div>
+                <div class="mb-3">
+                    <div class="fw-bold mb-2">소셜 로그인</div>
+                    <div class="d-grid gap-2">
+                        <a href="{% provider_login_url 'google' %}" class="btn text-white" style="background-color: rgb(255, 78, 55);background-size:30px auto;background-image:url('{% static 'google_icon.png' %}');background-repeat:no-repeat;background-position:15px center;">Google 로그인</a>
+                        <a href="{% provider_login_url 'github' %}" class="btn text-white" style="background-color: rgb(138, 138, 138);background-size:30px auto;background-image:url('{% static 'github_icon.png' %}');background-repeat:no-repeat;background-position:15px center;">Github 로그인</a>
+                        <a href="{% provider_login_url 'kakao' %}" class="btn" style="background-color: rgb(248, 198, 80);background-size:30px auto;background-image:url('{% static 'kakao_icon.png' %}');background-repeat:no-repeat;background-position:15px center;">KaKao 로그인</a>
+                        <a href="{% provider_login_url 'naver' %}" class="btn" style="background-color: rgb(88, 250, 59);background-size:30px auto;background-image:url('{% static 'naver_icon.png' %}');background-repeat:no-repeat;background-position:15px center;">Naver 로그인</a>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="fs-6">새로운 회원이신가요? <a href="{% url 'accounts:signup' %}">회원가입하기</a></div>
+            </div>
+        </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block style %}
+<style>
+.border-dotted  {
+    border-bottom: dotted;
+    border-width: 1px;
+}
+.card_img{
+    background-repeat:no-repeat;
+    background-position-y:center;
+    background-size:contain;
+}
+</style>
+{% endblock %}
+
+{% block title %}메인페이지{% endblock %}
+
+{% block top %}
+<!-- 최근 포스트 -->
+<h5 class="border-bottom">최근 포스트</h5>
+<div class="row g-2">
+    {% for post in recent_posts %}
+    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+        <a class="text-decoration-none text-dark" href="{% url 'board:post' post.board_id.url post.pk %}">
+        <div class="card">
+            <div class="row g-0">
+                <div class="col-lg-8">
+                    <div class="card-body">
+                        <h5 class="card-title" style="white-space:nowrap;overflow: hidden;text-overflow:ellipsis;">{{post.title}}</h5>
+                        <p class="card-text">{{post.short_title}}</p>
+                        <p class="card-text"><small class="text-muted"><i class="bi bi-calendar-week"></i> {{post.created_at|date:"Y-m-d"}}</small></p>
+                    </div>
+                </div>
+                {% if post.post_img %}
+                <div class="col-lg-4 card_img d-none d-lg-block rounded" style="background-image:url({{post.post_img.url}});">
+                {% else %}
+                <div class="col-lg-4 card_img d-none d-lg-block rounded" style="background-image:url({% static 'noimage.jpg' %});">
+                {% endif %}
+                </div>
+            </div>
+        </div>
+        </a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
+
+{% block middle_left %}
+<!-- 제목 내용 -->
+<h5 class="border-bottom">좋아요 많은 게시글</h5>
+<!-- 내용 부분만 -->
+<!-- 3개 정도? -->
+<!-- 글 제목 -->
+{% for post in main_posts %}
+<a class="text-decoration-none text-dark" href="{% url 'board:post' post.board_id.url post.pk %}">
+    <div class="py-3 border-dotted">
+        <h5>{{post.title}}</h5>
+        <!-- 글 작성자 / 작성일자 -->
+        <div class="text-secondary mb-2">
+            <i class="bi bi-person-circle"></i> {{post.author.nickname}} <i class="bi bi-calendar-week"></i> {{post.created_at|date:'Y-m-d'}}
+        </div>
+        <!-- 글 내용 -->
+        <div style="height: 100px;" class="text-break fs-6 mb-2 overflow-hidden">
+            {{post.body|safe}}
+        </div>
+        <!-- 좋아요 / 댓글 수  -->
+        <div>
+            <i class="bi bi-heart text-danger"></i></i> {{post.like_count}} <i class="bi bi-chat-right-text"></i> {{post.reply_count}}
+        </div>
+    </div>
+</a>
+{% endfor %}
+{% endblock %}
+
+{% block middle_right %}
+<!-- 소개 -->
+<div class="p-4 bg-light rounded my-2">
+    <h5>About NULL BLOG</h5>
+    <div>NULL의 개인 블로그 입니다~! 개인 일상/프로젝트/자료 등 잡다한 내용이 담길 블로그 입니다! 잘 부탁드립니다~!</div>
+</div>
+<!-- 공지 -->
+<div>
+    {% for announce in all_announce %}
+    <div class="toast shadow-sm show mb-2" style="width: 100%;" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <strong class="me-auto"><i class="bi bi-exclamation-diamond-fill text-warning"></i> {{announce.title}}</strong>
+            <small class="text-muted">{{announce.created_at|date:'Y-m-d'}}</small>
+        </div>
+        <div class="toast-body">
+            {{announce.body}}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<!-- Tags -->
+<div class="py-2">
+    <h5>TAGS</h5>
+    <div class="d-flex flex-wrap">
+        {% for tags in all_tags %}
+            <a href="{% url 'board:tag_board' tags.tag_name %}" class="badge bg-primary m-1 text-decoration-none text-white">{{tags.tag_name}} <span class="badge rounded-pill bg-light text-primary">{{tags.post_set.count}}</span></a>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
