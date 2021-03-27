@@ -41,7 +41,7 @@
                     <div class="col-lg-8">
                         <div class="card-body">
                             <h5 class="card-title" style="white-space:nowrap;overflow: hidden;text-overflow:ellipsis;">{{post.title}}</h5>
-                            <p class="card-text">{{post.short_title}}</p>
+                            <p class="card-text">{{post.short_title|striptags}}</p>
                             <div class="card-text"><small class="text-muted"><i class="bi bi-person-circle"></i> {{post.author.nickname}}</small></div>
                             <div class="card-text"><small class="text-muted"><i class="bi bi-calendar-week"></i> {{post.created_at|date:"Y-m-d"}}</small></div>
                             <div>
