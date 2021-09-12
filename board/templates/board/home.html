@@ -7,10 +7,21 @@
     border-bottom: dotted;
     border-width: 1px;
 }
+.card {
+    height: 100%;
+}
 .card_img{
     background-repeat:no-repeat;
     background-position-y:center;
     background-size:contain;
+}
+.card-text, .truncate-3 {
+    font-size: 15px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
 }
 </style>
 {% endblock %}
@@ -28,8 +39,8 @@
             <div class="row g-0">
                 <div class="col-lg-8">
                     <div class="card-body">
-                        <h5 class="card-title" style="white-space:nowrap;overflow: hidden;text-overflow:ellipsis;">{{post.title}}</h5>
-                        <p class="card-text">{{post.short_title|striptags}}</p>
+                        <h5 class="card-title text-truncate">{{post.title}}</h5>
+                        <p class="card-text truncate-3">{{post.short_body|striptags}}</p>
                         <p class="card-text"><small class="text-muted"><i class="bi bi-calendar-week"></i> {{post.created_at|date:"Y-m-d"}}</small></p>
                     </div>
                 </div>

@@ -59,9 +59,9 @@ class Post(TimeStampedModel):
             tag, tag_created = Tag.objects.get_or_create(tag_name=t)
             self.tag_set.add(tag)
 
-    def short_title(self):
-        if len(self.body) > 90:
-            return self.body[:90] + " ..."
+    def short_body(self):
+        if len(self.body) > 200:
+            return self.body[:200]
         else:
             return self.body
 
