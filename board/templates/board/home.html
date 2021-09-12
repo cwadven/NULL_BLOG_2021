@@ -74,7 +74,7 @@
 <!-- 글 제목 -->
 {% for post in main_posts %}
 <a class="text-decoration-none text-dark" href="{% url 'board:post' post.board_id.url post.pk %}">
-    <div class="p-3 border rounded">
+    <div class="p-3 m-3 border rounded">
         <h5>{{post.title}}</h5>
         <hr style="margin:5px;">
         <!-- 글 내용 -->
