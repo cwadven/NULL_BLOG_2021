@@ -15,7 +15,7 @@
     background-position-y:center;
     background-size:contain;
 }
-.card-text, .truncate-3 {
+.truncate-3 {
     font-size: 15px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -60,7 +60,6 @@
                 </div>
             </div>
         </div>
-        </div>
         </a>
     </div>
     {% endfor %}
@@ -82,7 +81,7 @@
             <i class="bi bi-person-circle"></i> {{post.author.nickname}} <i class="bi bi-calendar-week"></i> {{post.created_at|date:'Y-m-d'}}
         </div>
         <!-- 글 내용 -->
-        <div class="text-break truncate-5 mb-2 overflow-hidden">
+        <div class="text-break truncate-5 fs-6 mb-2 overflow-hidden">
             {{post.body|safe}}
         </div>
         <!-- 좋아요 / 댓글 수  -->
