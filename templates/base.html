@@ -26,6 +26,12 @@
             AjaxLogin(e);
         });
 
+        $('.login-form input').on('propertychange change keyup paste ', function(e){
+            if ($('#error_message').html() === "아이디 혹은 비밀번호 오류") {
+                $('#error_message').html("로그인 해주세요!")
+            }
+        });
+
         $('#logo').click(function(e){
             $(location).attr('href', location.origin);
         })
