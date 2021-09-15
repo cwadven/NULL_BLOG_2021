@@ -130,7 +130,11 @@ rereply_delete = (e) => {
 </style>
 {% endblock %}
 
-{% block title %}NULL 게시글{% endblock %}
+{% block title %}{{post.title}}{% endblock %}
+{% block og_title %}{{post.title}}{% endblock %}
+{% block description %}{{ post.body|striptags|slice:":100" }}{% endblock %}
+{% block current_url %}https://dalgona.shop{{ request.get_full_path }}{% endblock %}
+{% block img %}{% if post.post_img %}https://dalgona.shop{{ post.post_img.url }}{% else %}https://dalgona.shop/static/logo.ico{% endif %}{% endblock %}
 
 {% block middle_left %}
 <!-- 글 title -->

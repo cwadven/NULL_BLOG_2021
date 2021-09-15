@@ -7,12 +7,12 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{%block title%}{% endblock %}</title>
-    <meta property="og:title" content="NULL's 블로그" />
-    <meta property="og:description" content="천방지축 NULL이 잡다한 IT 자료를 올리는 블로그" />
+    <title>{% block title %}{% endblock %}</title>
+    <meta property="og:title" content="{% block og_title %}{% endblock %}" />
+    <meta property="og:description" content="{% block description %}{% endblock %}" />
     <meta property="og:type" content="website" />
-    <!-- <meta property="og:url" content="도메인" />
-    <meta property="og:image" content="도메인" /> -->
+    <meta property="og:url" content="{% block current_url %}{% endblock %}" />
+    <meta property="og:image" content="{% block img %}{% endblock %}" />
     <link rel="icon" href="{% static 'logo.ico' %}">
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.6.0/dist/umd/popper.min.js" integrity="sha384-KsvD1yqQ1/1+IA7gi3P0tyJcT3vR+NdBTt13hSJ2lnve8agRGXTTyNaBYmCR/Nwi" crossorigin="anonymous"></script>
     <!-- ajax -->
