@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from ckeditor_uploader.fields import RichTextUploadingField
 import re
+from django.urls import reverse
 
 class TimeStampedModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
@@ -64,6 +65,13 @@ class Post(TimeStampedModel):
             return self.body[:200]
         else:
             return self.body
+
+    # sitemap 생성하기 위해서 reverse 사용하여 해당 매개변수를 넣기
+    def get_absolute_url(self):
+        try:
+            return reverse('board:post', kwargs={'pk': self.id, 'board_url': self.board_id.url})
+        except:
+            pass
 
     def save(self, *args, **kwargs):
         saved = super(Post, self).save(*args, **kwargs)
