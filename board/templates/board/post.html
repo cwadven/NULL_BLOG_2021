@@ -7,6 +7,13 @@
 <script>hljs.initHighlightingOnLoad();</script>
 <script>
 $(function () {
+    $('#like').on('click', function(e){
+        if ("False" === "{{user.is_authenticated}}") {
+            alert("로그인 후, 이용해주세요!");
+            return false;
+        }
+    });
+
     $('.reply-form').on('submit', function(e){
         if ("False" === "{{user.is_authenticated}}") {
             alert("로그인 후, 이용해주세요!");
@@ -150,7 +157,7 @@ rereply_delete = (e) => {
     <i class="bi bi-heart text-danger"></i></i> {{post.like_count}} <i class="bi bi-chat-right-text"></i> {{post.reply_count}}
 </div>
 <div class="text-center my-3">
-    <a href="{% url 'board:like' post.board_id.url post.id %}" class="d-inline text-center border p-2 rounded text-decoration-none text-dark fw-bolder">
+    <a id="like" href="{% url 'board:like' post.board_id.url post.id %}" class="d-inline text-center border p-2 rounded text-decoration-none text-dark fw-bolder">
         {% if like_check %}
         <i class="bi bi-heart-fill text-danger"></i>
         {% else %}
