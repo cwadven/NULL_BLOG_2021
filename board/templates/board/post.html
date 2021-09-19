@@ -256,9 +256,10 @@ rereply_delete = (e) => {
 {% block middle_right %}
 <!-- 게시판 소개 -->
 <div class="p-4 bg-light rounded mb-2">
-    <h5>{{post.board_id.name}}</h5>
+    <h5><a href="{% url 'board:board' post.board_id.url %}">{{post.board_id.name}}</a></h5>
     <div>{{post.board_id.info}}</div>
 </div>
+
 <!-- 다른 게시판에 있는 게시글 목록 최신 -->
 <div class="card mb-3">
     <div class="card-header">
