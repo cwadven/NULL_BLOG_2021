@@ -31,9 +31,6 @@
     -webkit-line-clamp: 5;
     -webkit-box-orient: vertical;
 }
-.toast-body, .toast-title {
-    font-size: x-small;
-}
 </style>
 {% endblock %}
 
@@ -113,11 +110,11 @@
     <div class="toast shadow-sm show mb-2" style="width: 100%;" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="toast-header" style="justify-content: space-between;">
             <div class="text-truncate">
-                <strong class="me-auto toast-title"><i class="bi bi-exclamation-diamond-fill text-warning"></i> {{announce.title}}</strong>
+                <strong class="me-auto fs-xs"><i class="bi bi-exclamation-diamond-fill text-warning"></i> {{announce.title}}</strong>
             </div>
             <small style="flex-shrink: 0;" class="text-muted">{{announce.created_at|date:'Y-m-d'}}</small>
         </div>
-        <div class="toast-body">
+        <div class="toast-body fs-xs">
             {{announce.body}}
         </div>
     </div>
