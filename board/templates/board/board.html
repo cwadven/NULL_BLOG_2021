@@ -75,7 +75,7 @@
 </div>
 <!-- 검색 하기 -->
 <form class="d-flex mb-3" style="justify-content: flex-end;" method="get" action="">
-    <input class="me-2" type="text" value="search={{ request.GET.search }}" name="search" placeholder="검색어를 입력하세요." />
+    <input class="me-2" type="text" value="{{ request.GET.search }}" name="search" placeholder="검색어를 입력하세요." />
     <button class="btn btn-sm btn-primary" type="submit">검색</button>
 </form>
 
