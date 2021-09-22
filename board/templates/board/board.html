@@ -73,40 +73,80 @@
     </div>
     {% endfor %}
 </div>
+<!-- 검색 하기 -->
+<form class="d-flex mb-3" style="justify-content: flex-end;" method="get" action="">
+    <input class="me-2" type="text" value="{{ request.GET.search }}" name="search" placeholder="검색어를 입력하세요." />
+    <button class="btn btn-sm btn-primary" type="submit">검색</button>
+</form>
+
 <!-- 페이지 네이션 -->
 <nav aria-label="Page navigation example">
     <ul class="pagination justify-content-center">
         {%if posts.has_previous%}
         <li class="page-item">
-        <a class="page-link" href="?page=1" aria-label="First">
-            <span aria-hidden="true">&laquo;</span>
-        </a>
+            {% if request.GET.urlencode %}
+                <a class="page-link" href="?page=1&{{ request.GET.urlencode }}" aria-label="First">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            {% else %}
+                <a class="page-link" href="?page=1" aria-label="First">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            {% endif %}
         </li>
+
         <li class="page-item">
-        <a class="page-link" href="?page={{posts.previous_page_number}}" aria-label="Previous">
-            <span aria-hidden="true">&lt;</span>
-        </a>
+            {% if request.GET.urlencode %}
+                <a class="page-link" href="?page={{posts.previous_page_number}}&{{ request.GET.urlencode }}" aria-label="Previous">
+                    <span aria-hidden="true">&lt;</span>
+                </a>
+            {% else %}
+                <a class="page-link" href="?page={{posts.previous_page_number}}" aria-label="Previous">
+                    <span aria-hidden="true">&lt;</span>
+                </a>
+            {% endif %}
         </li>
         {%endif%}
 
         {% for i in page_range %}
-        {% if i == posts.number %}
-        <li class="page-item active"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
-        {% else %}
-        <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
-        {% endif %}
+            {% if i == posts.number %}
+                {% if request.GET.urlencode %}
+                    <li class="page-item active"><a class="page-link" href="?page={{i}}&{{ request.GET.urlencode }}">{{i}}</a></li>
+                {% else %}
+                    <li class="page-item active"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+                {% endif %}
+            {% else %}
+                {% if "search=" in request.get_full_path %}
+                    <li class="page-item"><a class="page-link" href="?page={{i}}&{{ request.GET.urlencode }}">{{i}}</a></li>
+                {% else %}
+                    <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+                {% endif %}
+            {% endif %}
         {% endfor %}
 
         {%if posts.has_next%}
         <li class="page-item">
-        <a class="page-link" href="?page={{posts.next_page_number}}" aria-label="Next">
-            <span aria-hidden="true">&gt;</span>
-        </a>
+        {% if request.GET.urlencode %}
+            <a class="page-link" href="?page={{posts.next_page_number}}&{{ request.GET.urlencode }}" aria-label="Next">
+                <span aria-hidden="true">&gt;</span>
+            </a>
+        {% else %}
+            <a class="page-link" href="?page={{posts.next_page_number}}" aria-label="Next">
+                <span aria-hidden="true">&gt;</span>
+            </a>
+        {% endif %}
         </li>
+
         <li class="page-item">
-        <a class="page-link" href="?page={{posts.paginator.num_pages}}" aria-label="Last">
-            <span aria-hidden="true">&raquo;</span>
-        </a>
+        {% if request.GET.urlencode %}
+            <a class="page-link" href="?page={{posts.paginator.num_pages}}&{{ request.GET.urlencode }}" aria-label="Last">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        {% else %}
+            <a class="page-link" href="?page={{posts.paginator.num_pages}}" aria-label="Last">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        {% endif %}
         </li>
         {%endif%}
     </ul>
