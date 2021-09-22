@@ -158,8 +158,15 @@ def like(request, board_url, pk):
 
 
 def tag_board(request, tag_name):
+    q = Q()
+
+    if request.GET.get('search'):
+        tag_id_list = Tag.objects.filter(tag_name__icontains=request.GET.get('search')).values_list('id', flat=True)
+        q = q & Q(title__icontains=request.GET.get('search')) | Q(body__icontains=request.GET.get('search')) | Q(
+            tag_set__in=tag_id_list)
+
     tag_board = get_object_or_404(Tag, tag_name=tag_name)
-    posts = tag_board.post_set.annotate(
+    posts = tag_board.post_set.filter(q).annotate(
         reply_count=Count('replys', distinct=True) + Count('rereply', distinct=True),
         like_count=Count('likes', distinct=True),
     ).order_by('-created_at')
