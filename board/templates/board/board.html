@@ -75,7 +75,7 @@
 </div>
 <!-- 검색 하기 -->
 <form class="d-flex mb-3" style="justify-content: flex-end;" method="get" action="">
-    <input class="me-2" type="text" value="{{ request.GET.search }}" name="search" placeholder="검색어를 입력하세요." />
+    <input class="me-2" type="text" value="search={{ request.GET.search }}" name="search" placeholder="검색어를 입력하세요." />
     <button class="btn btn-sm btn-primary" type="submit">검색</button>
 </form>
 
@@ -85,7 +85,7 @@
         {%if posts.has_previous%}
         <li class="page-item">
             {% if request.GET.search %}
-                <a class="page-link" href="?page=1&{{ request.GET.search }}" aria-label="First">
+                <a class="page-link" href="?page=1&search={{ request.GET.search }}" aria-label="First">
                     <span aria-hidden="true">&laquo;</span>
                 </a>
             {% else %}
@@ -97,7 +97,7 @@
 
         <li class="page-item">
             {% if request.GET.search %}
-                <a class="page-link" href="?page={{posts.previous_page_number}}&{{ request.GET.search }}" aria-label="Previous">
+                <a class="page-link" href="?page={{posts.previous_page_number}}&search={{ request.GET.search }}" aria-label="Previous">
                     <span aria-hidden="true">&lt;</span>
                 </a>
             {% else %}
@@ -111,13 +111,13 @@
         {% for i in page_range %}
             {% if i == posts.number %}
                 {% if request.GET.search %}
-                    <li class="page-item active"><a class="page-link" href="?page={{i}}&{{ request.GET.search }}">{{i}}</a></li>
+                    <li class="page-item active"><a class="page-link" href="?page={{i}}&search={{ request.GET.search }}">{{i}}</a></li>
                 {% else %}
                     <li class="page-item active"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
                 {% endif %}
             {% else %}
                 {% if "search=" in request.get_full_path %}
-                    <li class="page-item"><a class="page-link" href="?page={{i}}&{{ request.GET.search }}">{{i}}</a></li>
+                    <li class="page-item"><a class="page-link" href="?page={{i}}&search={{ request.GET.search }}">{{i}}</a></li>
                 {% else %}
                     <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
                 {% endif %}
@@ -127,7 +127,7 @@
         {%if posts.has_next%}
         <li class="page-item">
         {% if request.GET.search %}
-            <a class="page-link" href="?page={{posts.next_page_number}}&{{ request.GET.search }}" aria-label="Next">
+            <a class="page-link" href="?page={{posts.next_page_number}}&search={{ request.GET.search }}" aria-label="Next">
                 <span aria-hidden="true">&gt;</span>
             </a>
         {% else %}
@@ -139,7 +139,7 @@
 
         <li class="page-item">
         {% if request.GET.search %}
-            <a class="page-link" href="?page={{posts.paginator.num_pages}}&{{ request.GET.search }}" aria-label="Last">
+            <a class="page-link" href="?page={{posts.paginator.num_pages}}&search={{ request.GET.search }}" aria-label="Last">
                 <span aria-hidden="true">&raquo;</span>
             </a>
         {% else %}
