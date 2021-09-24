@@ -137,8 +137,8 @@ rereply_delete = (e) => {
 {% block title %}{{post.title}}{% endblock %}
 {% block og_title %}{{post.title}}{% endblock %}
 {% block description %}{{ post.body|striptags|slice:":100" }}{% endblock %}
-{% block current_url %}https://dalgona.shop{{ request.get_full_path }}{% endblock %}
-{% block img %}{% if post.post_img %}https://dalgona.shop{{ post.post_img.url }}{% else %}https://dalgona.shop/static/logo.ico{% endif %}{% endblock %}
+{% block current_url %}https://nulls.co.kr{{ request.get_full_path }}{% endblock %}
+{% block img %}{% if post.post_img %}https://nulls.co.kr{{ post.post_img.url }}{% else %}https://nulls.co.kr/static/logo.ico{% endif %}{% endblock %}
 
 {% block middle_left %}
 <!-- 글 title -->
