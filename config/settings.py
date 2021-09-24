@@ -8,7 +8,7 @@ SECRET_KEY = SECRET_KEY
 
 DEBUG = False 
 
-ALLOWED_HOSTS = ["dalgona.shop"]
+ALLOWED_HOSTS = ["nulls.co.kr"]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
