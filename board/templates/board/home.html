@@ -99,6 +99,12 @@
 {% endblock %}
 
 {% block middle_right %}
+<!-- 검색 하기 -->
+<form class="d-flex mb-3" style="justify-content: flex-end;" method="get" action="{% url 'board:post_search' %}">
+    <input class="me-2" type="text" value="{{ request.GET.search }}" name="search" placeholder="검색어를 입력하세요." />
+    <button class="btn btn-sm btn-primary" type="submit">검색</button>
+</form>
+
 <!-- 소개 -->
 <div class="p-4 bg-light rounded my-2">
     <h5>About NULL BLOG</h5>

@@ -6,6 +6,7 @@ app_name = 'board'
 urlpatterns = [
     path('', home, name='home'),
     path('tag/<str:tag_name>', tag_board, name='tag_board'),
+    path('search', post_search, name='post_search'),
     path('<str:board_url>', board, name='board'),
     path('<str:board_url>/<int:pk>', post_detail, name='post'),
     path('<str:board_url>/<int:pk>/reply', reply_write, name='reply'),
