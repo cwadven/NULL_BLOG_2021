@@ -262,10 +262,8 @@ rereply_delete = (e) => {
 
 <!-- 다른 게시판에 있는 게시글 목록 최신 -->
 <div class="card mb-3">
-    <div class="card-header">
-        {{post.board_id.name}} 최신 목록
-    </div>
     <ul class="list-group">
+        <li class="list-group-item fw-bolder">{{post.board_id.name}} 최신 목록</li>
         {% for list_post in qs|slice:'0:5' %}
         {% if post.id == list_post.id %}
         <a href="{% url 'board:post' list_post.board_id.url list_post.pk %}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center active">
