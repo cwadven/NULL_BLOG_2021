@@ -197,8 +197,8 @@ rereply_delete = (e) => {
 <div class="mb-2">
     <!-- 댓글 -->
     {% for reply in post.replys.all %}
-    <div class="card mb-3">
-        <div id="reply_{{reply.id}}" class="row g-0 my-1">
+    <div class="card mb-3 pb-2">
+        <div id="reply_{{reply.id}}" class="row g-0">
             <div class="text-end pe-2">
                 {% if user.is_authenticated %}
                 <i class="reply_call bi bi-reply-fill"></i>
@@ -207,23 +207,25 @@ rereply_delete = (e) => {
                     {% endif %}
                 {% endif %}
             </div>
-            <div class="col-2 align-self-center text-center">
-                {% if reply.author.user_img %}
-                <img class="img-thumbnail align-middle" style="max-width:70px;max-height: 70px;" src="{{reply.author.user_img.url}}" alt="{{reply.author.nickname}}">
-                {% else %}
-                <img class="img-thumbnail align-middle" style="max-width:70px;max-height: 70px;" src="{% static 'noimage.jpg' %}" alt="{{reply.author.nickname}}">
-                {% endif %}
-                <div>{{reply.author.nickname}}</div>
-            </div>
-            <div class="col-10">
-                <div class="p-1">
-                    <div class="card-text mb-1">{{reply.body}}</div>
-                    <div class="card-text"><small class="text-muted">{{reply.created_at|date:'Y-m-d'}}</small></div>
+            <div class="d-flex mx-2">
+                <div class="align-self-center text-center" style="display: flex;flex-direction: column;justify-content: center;align-items: center;">
+                    {% if reply.author.user_img %}
+                    <img class="img-thumbnail align-middle" style="max-width:70px;max-height: 70px;" src="{{reply.author.user_img.url}}" alt="{{reply.author.nickname}}">
+                    {% else %}
+                    <img class="img-thumbnail align-middle" style="max-width:70px;max-height: 70px;" src="{% static 'noimage.jpg' %}" alt="{{reply.author.nickname}}">
+                    {% endif %}
+                    <div>{{reply.author.nickname}}</div>
+                </div>
+                <div style="overflow-wrap: anywhere;">
+                    <div class="p-1">
+                        <div class="card-text mb-1">{{reply.body}}</div>
+                        <div class="card-text"><small class="text-muted">{{reply.created_at|date:'Y-m-d'}}</small></div>
+                    </div>
                 </div>
             </div>
         </div>
         {% for rereply in reply.rereplys.all %}
-        <div class="row g-0 my-1">
+        <div class="row g-0">
             <div class="text-end pe-2">
                 {% if user.is_authenticated %}
                     {% if request.user == rereply.author or request.user.is_superuser %}
@@ -231,19 +233,21 @@ rereply_delete = (e) => {
                     {% endif %}
                 {% endif %}
             </div>
-            <div class="col-1 align-self-center text-center"><i class="bi bi-arrow-return-right"></i></div>
-            <div class="col-2 align-self-center text-center">
-                {% if rereply.author.user_img %}
-                <img class="img-thumbnail align-middle" style="max-width:70px;max-height: 70px;" src="{{rereply.author.user_img.url}}" alt="{{rereply.author.nickname}}">
-                {% else %}
-                <img class="img-thumbnail align-middle" style="max-width:70px;max-height: 70px;" src="{% static 'noimage.jpg' %}" alt="{{rereply.author.nickname}}">
-                {% endif %}
-                <div>{{rereply.author.nickname}}</div>
-            </div>
-            <div class="col-9">
-                <div class="p-1">
-                    <div class="card-text mb-1">{{rereply.body}}</div>
-                    <div class="card-text"><small class="text-muted">{{rereply.created_at|date:'Y-m-d'}}</small></div>
+            <div class="d-flex mx-2">
+                <div class="align-self-center text-center me-2"><i class="bi bi-arrow-return-right"></i></div>
+                <div class="align-self-center text-center">
+                    {% if rereply.author.user_img %}
+                    <img class="img-thumbnail align-middle" style="max-width:70px;max-height: 70px;" src="{{rereply.author.user_img.url}}" alt="{{rereply.author.nickname}}">
+                    {% else %}
+                    <img class="img-thumbnail align-middle" style="max-width:70px;max-height: 70px;" src="{% static 'noimage.jpg' %}" alt="{{rereply.author.nickname}}">
+                    {% endif %}
+                    <div>{{rereply.author.nickname}}</div>
+                </div>
+                <div style="overflow-wrap: anywhere;">
+                    <div class="p-1">
+                        <div class="card-text mb-1">{{rereply.body}}</div>
+                        <div class="card-text"><small class="text-muted">{{rereply.created_at|date:'Y-m-d'}}</small></div>
+                    </div>
                 </div>
             </div>
         </div>
