@@ -79,14 +79,12 @@ Project Root
 │    └── 📜 wsgi.py
 │
 ├── 📂 App Name
-│    ├── 📂 migrations                               
-│    ├── 📜 adapter.py                               
+│    ├── 📂 migrations                                                      
 │    ├── 📜 admin.py                                
 │    ├── 📜 app.py
 │    ├── 📜 forms.py
 │    ├── 📜 tests.py
 │    ├── 📜 urls.py
-│    ├── 📜 validators.py
 │    ├── 📜 views.py
 │    └── 📜 modles.py                                     
 │
