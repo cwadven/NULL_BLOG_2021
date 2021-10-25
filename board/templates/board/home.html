@@ -3,18 +3,16 @@
 
 {% block style %}
 <style>
-.border-dotted  {
-    border-bottom: dotted;
-    border-width: 1px;
-}
 .card {
     height: 100%;
 }
+
 .card_img{
     background-repeat:no-repeat;
     background-position-y:center;
     background-size:contain;
 }
+
 .truncate-3 {
     font-size: 15px;
     overflow: hidden;
@@ -23,6 +21,7 @@
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
 }
+
 .truncate-5 {
     font-size: 15px;
     overflow: hidden;
@@ -57,11 +56,10 @@
                     </div>
                 </div>
                 {% if post.post_img %}
-                <div class="col-lg-4 card_img d-none d-lg-block rounded" style="background-image:url({{post.post_img.url}});">
+                <div class="col-lg-4 card_img d-none d-lg-block rounded" style="background-image:url({{post.post_img.url}});"></div>
                 {% else %}
-                <div class="col-lg-4 card_img d-none d-lg-block rounded" style="background-image:url({% static 'noimage.jpg' %});">
+                <div class="col-lg-4 card_img d-none d-lg-block rounded" style="background-image:url({% static 'noimage.jpg' %});"></div>
                 {% endif %}
-                </div>
             </div>
         </div>
         </a>
@@ -71,25 +69,19 @@
 {% endblock %}
 
 {% block middle_left %}
-<!-- 제목 내용 -->
+<!-- 좋아요 순 포스트 -->
 <h5 class="rounded-top border border-dark bg-light p-2">💌 좋아요 많은 게시글</h5>
-<!-- 내용 부분만 -->
-<!-- 3개 정도? -->
-<!-- 글 제목 -->
 {% for post in liked_ordered_post_set %}
 <a class="text-decoration-none text-dark" href="{% url 'board:post' post.board_id.url post.pk %}">
     <div class="p-3 mb-3 border rounded">
         <h5>{{post.title}}</h5>
         <hr style="margin:5px;">
-        <!-- 글 내용 -->
         <div class="text-break truncate-5 mb-2 overflow-hidden">
             {{post.body|safe}}
         </div>
-        <!-- 글 작성자 / 작성일자 -->
         <div class="text-secondary mb-2">
             <i class="bi bi-person-circle"></i> {{post.author.nickname}} <i class="bi bi-calendar-week"></i> {{post.created_at|date:'Y-m-d'}}
         </div>
-        <!-- 좋아요 / 댓글 수  -->
         <div>
             <i class="bi bi-heart text-danger"></i></i> {{post.like_count}} <i class="bi bi-chat-right-text"></i> {{post.reply_count}}
         </div>
@@ -110,7 +102,8 @@
     <h5>About NULL BLOG</h5>
     <div>NULL의 개인 블로그 입니다~! 개인 일상/프로젝트/자료 등 잡다한 내용이 담길 블로그 입니다! 잘 부탁드립니다~!</div>
 </div>
-<!-- 공지 -->
+
+<!-- Announce -->
 <div>
     {% for announce in announce_set %}
     <div class="toast shadow-sm show mb-2" style="width: 100%;" role="alert" aria-live="assertive" aria-atomic="true">
@@ -126,6 +119,7 @@
     </div>
     {% endfor %}
 </div>
+
 <!-- Tags -->
 <div class="py-2">
     <h5>TAGS</h5>
