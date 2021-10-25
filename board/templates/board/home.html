@@ -44,7 +44,7 @@
 <!-- 최근 포스트 -->
 <h5 class="rounded-top border border-dark bg-light p-2">✏ 최근 포스트</h5>
 <div class="row g-2">
-    {% for post in recent_posts %}
+    {% for post in recent_post_set %}
     <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
         <a class="text-decoration-none text-dark" href="{% url 'board:post' post.board_id.url post.pk %}">
         <div class="card">
@@ -76,7 +76,7 @@
 <!-- 내용 부분만 -->
 <!-- 3개 정도? -->
 <!-- 글 제목 -->
-{% for post in main_posts %}
+{% for post in liked_ordered_post_set %}
 <a class="text-decoration-none text-dark" href="{% url 'board:post' post.board_id.url post.pk %}">
     <div class="p-3 mb-3 border rounded">
         <h5>{{post.title}}</h5>
@@ -112,7 +112,7 @@
 </div>
 <!-- 공지 -->
 <div>
-    {% for announce in all_announce %}
+    {% for announce in announce_set %}
     <div class="toast shadow-sm show mb-2" style="width: 100%;" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="toast-header" style="justify-content: space-between;">
             <div class="text-truncate">
@@ -130,7 +130,7 @@
 <div class="py-2">
     <h5>TAGS</h5>
     <div class="d-flex flex-wrap">
-        {% for tags in all_tags %}
+        {% for tags in tag_set %}
             <a href="{% url 'board:tag_board' tags.tag_name %}" class="badge bg-primary m-1 text-decoration-none text-white">{{tags.tag_name}} <span class="badge rounded-pill bg-light text-primary">{{tags.post_set.count}}</span></a>
         {% endfor %}
     </div>

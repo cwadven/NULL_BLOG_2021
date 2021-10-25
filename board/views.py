@@ -1,5 +1,4 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from django.urls import reverse
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 
 from .models import *
@@ -9,26 +8,23 @@ from django.db.models import Count, Q
 from django.core.paginator import Paginator
 
 
-# 첫 화면
 def home(request):
-    # 최근 포스트
-    recent_posts = Post.objects.order_by('-created_at')[:6]
+    recent_post_set = Post.objects.order_by('-id')[:6]
 
-    # 많이 보일 게시판의 글
-    main_posts = Post.objects.annotate(
+    liked_ordered_post_set = Post.objects.annotate(
         reply_count=Count('replys', distinct=True) + Count('rereply', distinct=True),
         like_count=Count('likes', distinct=True),
     ).order_by('-like_count', '-reply_count', '-id')[:6]
 
-    all_tags = Tag.objects.all()
+    tag_set = Tag.objects.all()
 
-    all_announce = Announce.objects.order_by('-created_at')[:5]
+    announce_set = Announce.objects.order_by('-created_at')[:5]
 
     context = {
-        'recent_posts': recent_posts,
-        'main_posts': main_posts,
-        'all_tags': all_tags,
-        'all_announce': all_announce,
+        'recent_post_set': recent_post_set,
+        'liked_ordered_post_set': liked_ordered_post_set,
+        'tag_set': tag_set,
+        'announce_set': announce_set,
     }
 
     return render(request, 'board/home.html', context)
