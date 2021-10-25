@@ -18,7 +18,7 @@ def home(request):
     main_posts = Post.objects.annotate(
         reply_count=Count('replys', distinct=True) + Count('rereply', distinct=True),
         like_count=Count('likes', distinct=True),
-    ).order_by('-like_count', '-reply_count')[:6]
+    ).order_by('-like_count', '-reply_count', '-id')[:6]
 
     all_tags = Tag.objects.all()
 
