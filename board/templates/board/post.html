@@ -11,9 +11,10 @@
             $(window).scroll(function () {
                 const win_top = $(window).scrollTop();
                 const doc_height = $('.container').height();
+                const bottom_height = $('.extra-info').height();
                 const win_height = $(window).height();
 
-                let totalScroll = (win_top / (doc_height - win_height)) * 100;
+                let totalScroll = (win_top / (doc_height - win_height - bottom_height)) * 100;
 
                 $(".progress-bar").css("width", totalScroll + "%");
             });
@@ -220,94 +221,97 @@
         </a>
     </div>
     <!-- 태그 -->
-    <div class="mb-2">
-        {% for tag in post.tag_set.all %}
-            <a href="{% url 'board:tag_board' tag.tag_name %}" class="text-decoration-none">#{{ tag.tag_name }}</a>
-        {% endfor %}
-    </div>
-    <!-- 댓글 작성 -->
-    <div class="mb-3">
-        <form class="reply-form" method="POST" action="{% url 'board:reply' post.board_id.url post.id %}">
-            {% csrf_token %}
-            <div class="mb-2 form-floating">
+    <div class="extra-info">
+        <div class="mb-2">
+            {% for tag in post.tag_set.all %}
+                <a href="{% url 'board:tag_board' tag.tag_name %}" class="text-decoration-none">#{{ tag.tag_name }}</a>
+            {% endfor %}
+        </div>
+        <!-- 댓글 작성 -->
+        <div class="mb-3">
+            <form class="reply-form" method="POST" action="{% url 'board:reply' post.board_id.url post.id %}">
+                {% csrf_token %}
+                <div class="mb-2 form-floating">
                 <textarea name="reply_body" class="form-control" placeholder="댓글을 작성하세요!" id="floatingTextarea"
                           style="height: 150px" required></textarea>
-                <label for="floatingTextarea">댓글작성</label>
-            </div>
-            <div class="mb-2 text-end">
-                <input class="btn btn-secondary fw-bolder" type="submit" value="댓글 작성"/>
-            </div>
-        </form>
-    </div>
-    <!-- 댓글 + 대댓글 -->
-    <div class="mb-2">
-        <!-- 댓글 -->
-        {% for reply in post.replys.all %}
-            <div class="card mb-3 pb-2">
-                <div id="reply_{{ reply.id }}" class="row g-0">
-                    <div class="text-end pe-2">
-                        {% if user.is_authenticated %}
-                            <i class="reply_call bi bi-reply-fill"></i>
-                            {% if request.user == reply.author or request.user.is_superuser %}
-                                <i class="reply_del bi bi-trash-fill"></i>
-                            {% endif %}
-                        {% endif %}
-                    </div>
-                    <div class="d-flex mx-2">
-                        <div class="align-self-center text-center"
-                             style="display: flex;flex-direction: column;justify-content: center;align-items: center;">
-                            {% if reply.author.user_img %}
-                                <img class="img-thumbnail align-middle" style="max-width:70px;max-height: 70px;"
-                                     src="{{ reply.author.user_img.url }}" alt="{{ reply.author.nickname }}">
-                            {% else %}
-                                <img class="img-thumbnail align-middle" style="max-width:70px;max-height: 70px;"
-                                     src="{% static 'noimage.jpg' %}" alt="{{ reply.author.nickname }}">
-                            {% endif %}
-                            <div>{{ reply.author.nickname }}</div>
-                        </div>
-                        <div style="overflow-wrap: anywhere;">
-                            <div class="p-1">
-                                <div class="card-text mb-1">{{ reply.body }}</div>
-                                <div class="card-text"><small
-                                        class="text-muted">{{ reply.created_at|date:'Y-m-d' }}</small></div>
-                            </div>
-                        </div>
-                    </div>
+                    <label for="floatingTextarea">댓글작성</label>
                 </div>
-                {% for rereply in reply.rereplys.all %}
-                    <div class="row g-0">
+                <div class="mb-2 text-end">
+                    <input class="btn btn-secondary fw-bolder" type="submit" value="댓글 작성"/>
+                </div>
+            </form>
+        </div>
+        <!-- 댓글 + 대댓글 -->
+        <div class="mb-2">
+            <!-- 댓글 -->
+            {% for reply in post.replys.all %}
+                <div class="card mb-3 pb-2">
+                    <div id="reply_{{ reply.id }}" class="row g-0">
                         <div class="text-end pe-2">
                             {% if user.is_authenticated %}
-                                {% if request.user == rereply.author or request.user.is_superuser %}
-                                    <i id="rereply_{{ rereply.id }}" class="rereply_del bi bi-trash-fill"></i>
+                                <i class="reply_call bi bi-reply-fill"></i>
+                                {% if request.user == reply.author or request.user.is_superuser %}
+                                    <i class="reply_del bi bi-trash-fill"></i>
                                 {% endif %}
                             {% endif %}
                         </div>
                         <div class="d-flex mx-2">
-                            <div class="align-self-center text-center me-2"><i class="bi bi-arrow-return-right"></i>
-                            </div>
-                            <div class="align-self-center text-center">
-                                {% if rereply.author.user_img %}
+                            <div class="align-self-center text-center"
+                                 style="display: flex;flex-direction: column;justify-content: center;align-items: center;">
+                                {% if reply.author.user_img %}
                                     <img class="img-thumbnail align-middle" style="max-width:70px;max-height: 70px;"
-                                         src="{{ rereply.author.user_img.url }}" alt="{{ rereply.author.nickname }}">
+                                         src="{{ reply.author.user_img.url }}" alt="{{ reply.author.nickname }}">
                                 {% else %}
                                     <img class="img-thumbnail align-middle" style="max-width:70px;max-height: 70px;"
-                                         src="{% static 'noimage.jpg' %}" alt="{{ rereply.author.nickname }}">
+                                         src="{% static 'noimage.jpg' %}" alt="{{ reply.author.nickname }}">
                                 {% endif %}
-                                <div>{{ rereply.author.nickname }}</div>
+                                <div>{{ reply.author.nickname }}</div>
                             </div>
                             <div style="overflow-wrap: anywhere;">
                                 <div class="p-1">
-                                    <div class="card-text mb-1">{{ rereply.body }}</div>
+                                    <div class="card-text mb-1">{{ reply.body }}</div>
                                     <div class="card-text"><small
-                                            class="text-muted">{{ rereply.created_at|date:'Y-m-d' }}</small></div>
+                                            class="text-muted">{{ reply.created_at|date:'Y-m-d' }}</small></div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                {% endfor %}
-            </div>
-        {% endfor %}
+                    {% for rereply in reply.rereplys.all %}
+                        <div class="row g-0">
+                            <div class="text-end pe-2">
+                                {% if user.is_authenticated %}
+                                    {% if request.user == rereply.author or request.user.is_superuser %}
+                                        <i id="rereply_{{ rereply.id }}" class="rereply_del bi bi-trash-fill"></i>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                            <div class="d-flex mx-2">
+                                <div class="align-self-center text-center me-2"><i class="bi bi-arrow-return-right"></i>
+                                </div>
+                                <div class="align-self-center text-center">
+                                    {% if rereply.author.user_img %}
+                                        <img class="img-thumbnail align-middle" style="max-width:70px;max-height: 70px;"
+                                             src="{{ rereply.author.user_img.url }}"
+                                             alt="{{ rereply.author.nickname }}">
+                                    {% else %}
+                                        <img class="img-thumbnail align-middle" style="max-width:70px;max-height: 70px;"
+                                             src="{% static 'noimage.jpg' %}" alt="{{ rereply.author.nickname }}">
+                                    {% endif %}
+                                    <div>{{ rereply.author.nickname }}</div>
+                                </div>
+                                <div style="overflow-wrap: anywhere;">
+                                    <div class="p-1">
+                                        <div class="card-text mb-1">{{ rereply.body }}</div>
+                                        <div class="card-text"><small
+                                                class="text-muted">{{ rereply.created_at|date:'Y-m-d' }}</small></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
     </div>
 {% endblock %}
 
