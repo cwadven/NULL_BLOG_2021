@@ -128,6 +128,10 @@
 
 {% block style %}
     <style>
+        .other_post {
+            text-decoration: auto;
+        }
+
         .reply_call:hover {
             cursor: pointer;
         }
@@ -219,6 +223,19 @@
             {% endif %}
             좋아요
         </a>
+    </div>
+    <!-- 이전/다음 게시글 -->
+    <div class="d-flex justify-content-between mb-2">
+        {% if prev_post %}
+            <a class="other_post" href="{% url 'board:post' prev_post.board_id.url prev_post.id %}">👈 이전글</a>
+        {% else %}
+            <div></div>
+        {% endif %}
+        {% if next_post %}
+            <a class="other_post" href="{% url 'board:post' next_post.board_id.url next_post.id %}">다음글 👉</a>
+        {% else %}
+            <div></div>
+        {% endif %}
     </div>
     <!-- 태그 -->
     <div class="extra-info">

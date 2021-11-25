@@ -123,10 +123,17 @@ def post_search(request):
 
 # 자세한 글 보기
 def post_detail(request, board_url, pk):
-    qs = Post.objects.filter(board_id__url=board_url).annotate(
+    qs = Post.objects.filter(board_id__url=board_url).select_related(
+        'board_id'
+    ).order_by('-id')
+
+    prev_post = qs.filter(id__lt=pk).first()
+    next_post = qs.filter(id__gt=pk).first()
+
+    qs = qs.annotate(
         reply_count=Count('replys', distinct=True) + Count('rereply', distinct=True),
         like_count=Count('likes', distinct=True),
-    ).order_by('-created_at')
+    )
 
     post = get_object_or_404(qs, board_id__url=board_url, pk=pk)
 
@@ -139,6 +146,8 @@ def post_detail(request, board_url, pk):
         'like_check': like_check,
         'qs': qs,
         'post': post,
+        'prev_post': prev_post,
+        'next_post': next_post,
     }
 
     return render(request, 'board/post.html', context)
