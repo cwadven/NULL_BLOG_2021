@@ -39,6 +39,12 @@ https://nulls.co.kr
 
 ![Oracle](https://img.shields.io/badge/Oracle-F80000?style=for-the-badge&logo=oracle&logoColor=white) ![Nginx](https://img.shields.io/badge/nginx-%23009639.svg?style=for-the-badge&logo=nginx&logoColor=white) 
 
+## CI/CD
+
+[edit . 2021-12-18]
+
+![GitHub Actions](https://img.shields.io/badge/githubactions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white)
+
 ## Developer Information
 
 [edit . 2021-10-19]
