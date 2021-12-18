@@ -8,11 +8,10 @@ jobs:
   build:
     runs-on: self-hosted
 
-    steps:
-    - name: Set Environment
-      run: |
-        declare -x SERVER_ENV="Main"
+    env:
+      SERVER_ENV: Main
 
+    steps:
     - name: Pull Master Branch
       run: |
         cd /var/www/null_blog/ && sudo git pull origin master
