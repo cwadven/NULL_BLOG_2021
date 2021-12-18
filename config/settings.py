@@ -6,7 +6,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = SECRET_KEY
 
-SERVER_ENV = os.environ.setdefault('SERVER_ENV', 'Local')
+SERVER_ENV = os.environ.setdefault('SERVER_ENV', 'Main')
 
 if SERVER_ENV == 'Local':
     DEBUG = True
