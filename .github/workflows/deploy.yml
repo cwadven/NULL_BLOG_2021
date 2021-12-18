@@ -29,5 +29,3 @@ jobs:
       run: |
         sudo systemctl restart nginx
         sudo systemctl restart uwsgi
-        echo "Done"
-        echo SERVER_ENV
