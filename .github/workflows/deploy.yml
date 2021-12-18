@@ -9,6 +9,10 @@ jobs:
     runs-on: self-hosted
 
     steps:
+    - name: Set Environment
+      run: |
+        sudo export SERVER_ENV="Main"
+
     - name: Pull Master Branch
       run: |
         cd /var/www/null_blog/ && sudo git pull origin master
@@ -26,3 +30,4 @@ jobs:
         sudo systemctl restart nginx
         sudo systemctl restart uwsgi
         echo "Done"
+        echo SERVER_ENV
