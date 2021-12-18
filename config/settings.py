@@ -6,9 +6,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = SECRET_KEY
 
-DEBUG = False 
+SERVER_ENV = os.environ.setdefault('SERVER_ENV', 'Local')
 
-ALLOWED_HOSTS = ["nulls.co.kr"]
+if SERVER_ENV == 'Local':
+    DEBUG = True
+    ALLOWED_HOSTS = ["*"]
+else:
+    DEBUG = False
+    ALLOWED_HOSTS = ["nulls.co.kr"]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
