@@ -8,9 +8,6 @@ jobs:
   build:
     runs-on: self-hosted
 
-    env:
-      SERVER_ENV: Main
-
     steps:
     - name: Pull Master Branch
       run: |
