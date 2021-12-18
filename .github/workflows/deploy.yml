@@ -11,7 +11,7 @@ jobs:
     steps:
     - name: Set Environment
       run: |
-        sudo export SERVER_ENV="Main"
+        export SERVER_ENV="Main"
 
     - name: Pull Master Branch
       run: |
