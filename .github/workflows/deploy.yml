@@ -25,4 +25,3 @@ jobs:
       run: |
         sudo systemctl restart nginx
         sudo systemctl restart uwsgi
-        export
