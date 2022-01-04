@@ -128,7 +128,7 @@ def post_detail(request, board_url, pk):
     ).order_by('-id')
 
     prev_post = qs.filter(id__lt=pk).first()
-    next_post = qs.filter(id__gt=pk).first()
+    next_post = qs.filter(id__gt=pk).order_by('id').first()
 
     qs = qs.annotate(
         reply_count=Count('replys', distinct=True) + Count('rereply', distinct=True),
