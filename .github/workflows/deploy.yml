@@ -27,11 +27,11 @@ jobs:
 
     - name: Cron Remove
       run: |
-        . /var/www/null_blog/venv/bin/activate && python /var/www/null_blog/manage.py crontab remove --noinput
+        . /var/www/null_blog/venv/bin/activate && python /var/www/null_blog/manage.py crontab remove
 
     - name: Cron Add
       run: |
-        . /var/www/null_blog/venv/bin/activate && python /var/www/null_blog/manage.py crontab add --noinput
+        . /var/www/null_blog/venv/bin/activate && python /var/www/null_blog/manage.py crontab add
 
     - name: Restart server
       run: |
