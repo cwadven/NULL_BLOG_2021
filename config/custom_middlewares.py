@@ -1,5 +1,7 @@
 import datetime
 
+from django.db import transaction
+
 from common_library import get_client_ip, time_until_end_of_day
 from control.models import IPVisitant, TodayYesterday
 
@@ -21,8 +23,9 @@ class VisitorCountMiddleware:
 
             # 방문한 적이 없을 경우 (테이블)
             if not self.is_table_visited(client_ip):
-                self.set_table_visited(client_ip)
-                self.update_today_visitor()
+                with transaction.atomic:
+                    self.set_table_visited(client_ip)
+                    self.update_today_visitor()
 
         return response
 
@@ -37,8 +40,12 @@ class VisitorCountMiddleware:
 
     @staticmethod
     def is_table_visited(client_ip):
-        yesterday = datetime.date.today() - datetime.timedelta(days=1)
-        if IPVisitant.objects.filter(ip=client_ip, created_at__gt=yesterday).exists():
+        today_filter_options = {
+            "created_at__year": datetime.date.today().year,
+            "created_at__month": datetime.date.today().month,
+            "created_at__day": datetime.date.today().day,
+        }
+        if IPVisitant.objects.filter(ip=client_ip, **today_filter_options).exists():
             return True
         return False
 
@@ -62,9 +69,13 @@ class VisitorCountMiddleware:
 
     @staticmethod
     def count_today_visitor():
-        yesterday = datetime.date.today() - datetime.timedelta(days=1)
+        today_filter_options = {
+            "created_at__year": datetime.date.today().year,
+            "created_at__month": datetime.date.today().month,
+            "created_at__day": datetime.date.today().day,
+        }
         today_visitor_count = IPVisitant.objects.filter(
-            created_at__gt=yesterday
+            **today_filter_options
         ).count()
         return today_visitor_count
 
