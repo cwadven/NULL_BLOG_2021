@@ -180,7 +180,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 CRONJOBS = [
-    ('0 0 * * *', 'config.cron.update_yesterday_and_today_visitor', '>> visitor_update.log')
+    ('* * * * *', 'config.cron.update_yesterday_and_today_visitor', '>> visitor_update.log')
 ]
 
 # Internationalization
