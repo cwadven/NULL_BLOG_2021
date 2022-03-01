@@ -13,9 +13,9 @@ jobs:
       run: |
         cd /var/www/null_blog/ && sudo git pull origin master
 
-    - name: pip update
-        run: |
-          . /var/www/null_blog/venv/bin/activate && pip install -r /var/www/null_blog/requirements.txt
+    - name: pip Update
+      run: |
+        . /var/www/null_blog/venv/bin/activate && pip install -r /var/www/null_blog/requirements.txt
 
     - name: Collectstatic
       run: |
