@@ -25,10 +25,6 @@ jobs:
       run: |
         . /var/www/null_blog/venv/bin/activate && python /var/www/null_blog/manage.py migrate --noinput
 
-    - name: Cron Remove
-      run: |
-        . /var/www/null_blog/venv/bin/activate && python /var/www/null_blog/manage.py crontab remove
-
     - name: Cron Add
       run: |
         . /var/www/null_blog/venv/bin/activate && python /var/www/null_blog/manage.py crontab add
