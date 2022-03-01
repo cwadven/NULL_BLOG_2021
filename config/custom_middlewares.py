@@ -23,7 +23,7 @@ class VisitorCountMiddleware:
 
             # 방문한 적이 없을 경우 (테이블)
             if not self.is_table_visited(client_ip):
-                with transaction.atomic:
+                with transaction.atomic():
                     self.set_table_visited(client_ip)
                     self.update_today_visitor()
 
