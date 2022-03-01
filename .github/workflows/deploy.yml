@@ -28,6 +28,7 @@ jobs:
     - name: Cron Add
       run: |
         . /var/www/null_blog/venv/bin/activate && python /var/www/null_blog/manage.py crontab add
+      continue-on-error: true
 
     - name: Restart server
       run: |
