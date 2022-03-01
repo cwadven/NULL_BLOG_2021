@@ -24,7 +24,7 @@ class IPVisitant(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'{self.ip}'
+        return f'{self.ip} {self.created_at}'
 
 
 # 방문자 수, 조회 테이블
