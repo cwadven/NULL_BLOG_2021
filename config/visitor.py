@@ -33,7 +33,6 @@ class VisitorCountMiddleware:
     @staticmethod
     def set_cookie_visited(response):
         end_of_day_left_time = time_until_end_of_day()
-        print(datetime.datetime.now())
         response.set_cookie('is_visited', 1, max_age=end_of_day_left_time)
 
     @staticmethod
