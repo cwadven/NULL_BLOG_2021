@@ -63,9 +63,9 @@ class VisitorCountMiddleware:
     @staticmethod
     def count_today_visitor():
         yesterday = datetime.date.today() - datetime.timedelta(days=1)
-        today_visitor_count = IPVisitant.objects.count(
+        today_visitor_count = IPVisitant.objects.filter(
             created_at__gt=yesterday
-        )
+        ).count()
         return today_visitor_count
 
 
