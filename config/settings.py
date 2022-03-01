@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'django.contrib.humanize',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -32,6 +33,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.github',
     'django_seed',
+    'django_crontab',
     'ckeditor',
     'ckeditor_uploader',
     'accounts',
@@ -59,9 +61,9 @@ CKEDITOR_CONFIGS = {
                        'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl',
                        'Language']},
             {'name': 'extra',
-            'items': [
-                'CodeSnippet', ],
-            },
+             'items': [
+                 'CodeSnippet', ],
+             },
             {'name': 'links', 'items': ['Link', 'Unlink', 'Anchor']},
             {'name': 'insert',
              'items': ['Image', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak']},
@@ -88,7 +90,7 @@ CKEDITOR_CONFIGS = {
         # 'mathJaxLib': '//cdn.mathjax.org/mathjax/2.2-latest/MathJax.js?config=TeX-AMS_HTML',
         'tabSpaces': 4,
         'extraPlugins': ','.join([
-            'uploadimage', # the upload image feature
+            'uploadimage',  # the upload image feature
             # your extra plugins here
             'codesnippet',
             'div',
@@ -135,6 +137,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'config.custom_middlewares.VisitorCountMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -151,6 +154,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'board.context_processors.nav_board',
+                'config.custom_context_processors.visitor_info',
             ],
         },
     },
@@ -175,20 +179,22 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+CRONJOBS = [
+    ('0 0 * * *', 'config.cron.update_yesterday_and_today_visitor', '>>' + os.path.join(BASE_DIR, 'cron_log/visitor_update.log'))
+]
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Seoul'
 
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
-
+USE_TZ = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
