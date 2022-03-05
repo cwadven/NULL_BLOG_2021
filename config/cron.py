@@ -28,5 +28,5 @@ def update_yesterday_and_today_visitor():
     else:
         TodayYesterday.objects.create(
             yesterday=0,
-            today=0,
+            today=1,
         )
