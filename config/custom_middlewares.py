@@ -56,14 +56,13 @@ class VisitorCountMiddleware:
         )
 
     def update_today_visitor(self):
-        visitor_info_set = TodayYesterday.objects.all()
-        if visitor_info_set.exists():
-            today_yesterday_model = visitor_info_set[0]
-            today_yesterday_model.today = self.count_today_visitor()
-            today_yesterday_model.save(update_fields=['today'])
+        visitor_info = TodayYesterday.objects.last()
+        if visitor_info:
+            visitor_info.today = self.count_today_visitor()
+            visitor_info.save(update_fields=['today'])
         else:
             TodayYesterday.objects.create(
-                today=1,
+                today=0,
                 yesterday=0,
             )
 
