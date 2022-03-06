@@ -114,4 +114,4 @@ Project Root
 
 [edit . 2022-03-06]
 
-![img.png](https://github.com/cwadven/NULL_BLOG_2021/tree/master/github_project_info_images/null_blog_database_picture.png)
+![img.png](https://github.com/cwadven/NULL_BLOG_2021/blob/master/github_project_info_images/null_blog_database_picture.png?raw=true)
