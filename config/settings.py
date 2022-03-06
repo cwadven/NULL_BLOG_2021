@@ -1,6 +1,9 @@
 from pathlib import Path
 import os
-from .PRIVATE_SETTING import (SECRET_KEY, LOCAL_DATABASE)
+from .PRIVATE_SETTING import (
+    SECRET_KEY,
+    LOCAL_DATABASE
+)
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
