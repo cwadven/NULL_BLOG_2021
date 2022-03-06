@@ -300,9 +300,9 @@
                                 {% endif %}
                                 <div>{{ reply.author.nickname }}</div>
                             </div>
-                            <div style="overflow-wrap: anywhere;">
+                            <div style="overflow-wrap: anywhere; margin-left: 5px;">
                                 <div class="p-1">
-                                    <div class="card-text mb-1">{{ reply.body }}</div>
+                                    <div class="card-text mb-1 ps-1 pe-3">{{ reply.body }}</div>
                                     <div class="card-text"><small
                                             class="text-muted">{{ reply.created_at|date:'Y-m-d' }}</small></div>
                                 </div>
@@ -332,9 +332,9 @@
                                     {% endif %}
                                     <div>{{ rereply.author.nickname }}</div>
                                 </div>
-                                <div style="overflow-wrap: anywhere;">
+                                <div style="overflow-wrap: anywhere; margin-left: 5px;">
                                     <div class="p-1">
-                                        <div class="card-text mb-1">{{ rereply.body }}</div>
+                                        <div class="card-text mb-1 ps-1 pe-3">{{ rereply.body }}</div>
                                         <div class="card-text"><small
                                                 class="text-muted">{{ rereply.created_at|date:'Y-m-d' }}</small></div>
                                     </div>
