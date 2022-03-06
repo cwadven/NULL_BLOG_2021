@@ -112,12 +112,6 @@ Project Root
 
 ## Database Structure
 
-[edit . 2021-10-19]
+[edit . 2022-03-06]
 
-생성할 때, Django 의 배경지식이 많이 없어서 Model 에서 정의하는 테이블, 속성 명칭을 잘 못짠 것 같다.
-
-추후 다른 프로젝트를 할 경우는 이런 방식으로 짜면 안될 것 같다.
-
-( id_id 가... 뭐냐.. 쩝... 진짜... 초보적인 실수... 회고 해보면 정말... )
-
-![img.png](img.png)
+![img.png](https://github.com/cwadven/NULL_BLOG_2021/tree/master/github_project_info_images/null_blog_database_picture.png)
