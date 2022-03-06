@@ -7,9 +7,9 @@ def visitor_info(request):
         "yesterday": 0,
     }
 
-    visitor_info_set = TodayYesterday.objects.all()
+    day_visitor_info = TodayYesterday.objects.last()
 
-    if visitor_info_set.exists():
-        _visitor_info = visitor_info_set.values()[0]
+    if day_visitor_info:
+        _visitor_info = day_visitor_info
 
     return {'visitor_info': _visitor_info}
