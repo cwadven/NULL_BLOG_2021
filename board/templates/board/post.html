@@ -86,7 +86,7 @@
             const form = document.createElement("form");
             form.setAttribute("class", "rereply-form");
             form.method = "POST";
-            form.action = "{% url 'board:rereply' post.board_id.url '00000' %}".replace('00000', parent.id.replace('reply_', ''));
+            form.action = "{% url 'board:rereply' post.board.url '00000' %}".replace('00000', parent.id.replace('reply_', ''));
             // 쓸 곳 만들기
             const body_div = document.createElement("div");
             body_div.setAttribute("class", "form-floating");
@@ -126,11 +126,11 @@
 
         reply_delete = (e) => {
             let parent = e.currentTarget.offsetParent.children[0];
-            $(location).attr('href', "{% url 'board:reply_delete' post.board_id.url '00000' %}".replace('00000', parent.id.replace('reply_', '')));
+            $(location).attr('href', "{% url 'board:reply_delete' post.board.url '00000' %}".replace('00000', parent.id.replace('reply_', '')));
         }
 
         rereply_delete = (e) => {
-            $(location).attr('href', "{% url 'board:rereply_delete' post.board_id.url '00000' %}".replace('00000', e.target.id.replace('rereply_', '')));
+            $(location).attr('href', "{% url 'board:rereply_delete' post.board.url '00000' %}".replace('00000', e.target.id.replace('rereply_', '')));
         }
 
 
@@ -230,7 +230,7 @@
             class="bi bi-chat-right-text"></i> {{ post.reply_count }}
     </div>
     <div class="text-center my-3">
-        <a id="like" href="{% url 'board:like' post.board_id.url post.id %}"
+        <a id="like" href="{% url 'board:like' post.board.url post.id %}"
            class="d-inline text-center border p-2 rounded text-decoration-none text-dark fw-bolder">
             {% if like_check %}
                 <i class="bi bi-heart-fill text-danger"></i>
@@ -243,12 +243,12 @@
     <!-- 이전/다음 게시글 -->
     <div class="d-flex justify-content-between mb-2">
         {% if prev_post %}
-            <a class="other_post" href="{% url 'board:post' prev_post.board_id.url prev_post.id %}">👈 이전글</a>
+            <a class="other_post" href="{% url 'board:post' prev_post.board.url prev_post.id %}">👈 이전글</a>
         {% else %}
             <div></div>
         {% endif %}
         {% if next_post %}
-            <a class="other_post" href="{% url 'board:post' next_post.board_id.url next_post.id %}">다음글 👉</a>
+            <a class="other_post" href="{% url 'board:post' next_post.board.url next_post.id %}">다음글 👉</a>
         {% else %}
             <div></div>
         {% endif %}
@@ -262,7 +262,7 @@
         </div>
         <!-- 댓글 작성 -->
         <div class="mb-3">
-            <form class="reply-form" method="POST" action="{% url 'board:reply' post.board_id.url post.id %}">
+            <form class="reply-form" method="POST" action="{% url 'board:reply' post.board.url post.id %}">
                 {% csrf_token %}
                 <div class="mb-2 form-floating">
                 <textarea name="reply_body" class="form-control" placeholder="댓글을 작성하세요!" id="floatingTextarea"
@@ -351,20 +351,20 @@
 {% block middle_right %}
     <!-- 게시판 소개 -->
     <div class="p-4 bg-light rounded mb-2">
-        <h5><a href="{% url 'board:board' post.board_id.url %}">{{ post.board_id.name }}</a></h5>
-        <div>{{ post.board_id.info }}</div>
+        <h5><a href="{% url 'board:board' post.board.url %}">{{ post.board.name }}</a></h5>
+        <div>{{ post.board.info }}</div>
     </div>
 
     <!-- 다른 게시판에 있는 게시글 목록 최신 -->
     <div class="card mb-3">
         <ul class="list-group">
-            <li class="list-group-item fw-bolder">{{ post.board_id.name }} 최신 목록</li>
+            <li class="list-group-item fw-bolder">{{ post.board.name }} 최신 목록</li>
             {% for list_post in qs|slice:'0:5' %}
                 {% if post.id == list_post.id %}
-                    <a href="{% url 'board:post' list_post.board_id.url list_post.pk %}"
+                    <a href="{% url 'board:post' list_post.board.url list_post.pk %}"
                        class="list-group-item list-group-item-action d-flex justify-content-between align-items-center active">
                 {% else %}
-                    <a href="{% url 'board:post' list_post.board_id.url list_post.pk %}"
+                    <a href="{% url 'board:post' list_post.board.url list_post.pk %}"
                        class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
                 {% endif %}
             <div class="text-truncate new-list-title">{{ list_post.title }}</div>

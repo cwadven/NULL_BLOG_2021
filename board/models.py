@@ -35,7 +35,7 @@ class Board(TimeStampedModel):
     name = models.CharField(max_length=30, unique=True, db_index=True)
     info = models.TextField(null=True, blank=True)
     board_img = models.ImageField(upload_to='board_img/', null=True, blank=True)
-    board_group_id = models.ForeignKey(BoardGroup, on_delete=models.SET_NULL, null=True, blank=True)
+    board_group = models.ForeignKey(BoardGroup, on_delete=models.SET_NULL, null=True, blank=True)
     attribute = models.IntegerField(default=0, db_index=True)
 
     def __str__(self):
@@ -48,7 +48,7 @@ class Post(TimeStampedModel):
     body = RichTextUploadingField()
     def_tag = models.CharField(max_length=150, null=True, blank=True)
     post_img = models.ImageField(upload_to='post_img/', null=True, blank=True)
-    board_id = models.ForeignKey(Board, on_delete=models.CASCADE)
+    board = models.ForeignKey(Board, on_delete=models.CASCADE)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='posts', on_delete=models.CASCADE)
     tag_set = models.ManyToManyField('Tag', blank=True)
 
@@ -74,7 +74,7 @@ class Post(TimeStampedModel):
     # sitemap 생성하기 위해서 reverse 사용하여 해당 매개변수를 넣기
     def get_absolute_url(self):
         try:
-            return reverse('board:post', kwargs={'pk': self.id, 'board_url': self.board_id.url})
+            return reverse('board:post', kwargs={'pk': self.id, 'board_url': self.board.url})
         except:
             pass
 
@@ -88,7 +88,7 @@ class Post(TimeStampedModel):
 
 # 좋아요
 class Like(TimeStampedModel):
-    post_id = models.ForeignKey(Post, related_name='likes', on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, related_name='likes', on_delete=models.CASCADE)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):

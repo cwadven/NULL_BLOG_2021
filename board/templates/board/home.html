@@ -45,7 +45,7 @@
 <div class="row g-2">
     {% for post in recent_post_set %}
     <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-        <a class="text-decoration-none text-dark" href="{% url 'board:post' post.board_id.url post.pk %}">
+        <a class="text-decoration-none text-dark" href="{% url 'board:post' post.board.url post.pk %}">
         <div class="card">
             <div class="row g-0">
                 <div class="col-lg-8">
@@ -72,7 +72,7 @@
 <!-- 좋아요 순 포스트 -->
 <h5 class="rounded-top border border-dark bg-light p-2">💌 좋아요 많은 게시글</h5>
 {% for post in liked_ordered_post_set %}
-<a class="text-decoration-none text-dark" href="{% url 'board:post' post.board_id.url post.pk %}">
+<a class="text-decoration-none text-dark" href="{% url 'board:post' post.board.url post.pk %}">
     <div class="p-3 mb-3 border rounded">
         <h5>{{post.title}}</h5>
         <hr style="margin:5px;">

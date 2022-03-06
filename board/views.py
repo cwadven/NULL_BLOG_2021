@@ -123,8 +123,8 @@ def post_search(request):
 
 # 자세한 글 보기
 def post_detail(request, board_url, pk):
-    qs = Post.objects.filter(board_id__url=board_url).select_related(
-        'board_id'
+    qs = Post.objects.filter(board__url=board_url).select_related(
+        'board'
     ).order_by('-id')
 
     prev_post = qs.filter(id__lt=pk).first()
@@ -135,10 +135,10 @@ def post_detail(request, board_url, pk):
         like_count=Count('likes', distinct=True),
     )
 
-    post = get_object_or_404(qs, board_id__url=board_url, pk=pk)
+    post = get_object_or_404(qs, board__url=board_url, pk=pk)
 
     if request.user.is_authenticated:
-        like_check = Like.objects.filter(author=request.user, post_id=post).exists()
+        like_check = Like.objects.filter(author=request.user, post=post).exists()
     else:
         like_check = False
 
@@ -156,7 +156,7 @@ def post_detail(request, board_url, pk):
 # 댓글 작성
 def reply_write(request, board_url, pk):
     if request.method == 'POST' and request.user.is_authenticated:
-        post = get_object_or_404(Post, board_id__url=board_url, pk=pk)
+        post = get_object_or_404(Post, board__url=board_url, pk=pk)
         if request.POST.get('reply_body'):
             Reply.objects.create(post_id=post, author=request.user, body=request.POST.get('reply_body'))
 
@@ -199,11 +199,11 @@ def rereply_delete(request, board_url, pk):
 def like(request, board_url, pk):
     post = get_object_or_404(Post, id=pk)
     if request.user.is_authenticated:
-        qs = Like.objects.filter(author=request.user, post_id=post)
+        qs = Like.objects.filter(author=request.user, post=post)
         if qs.exists():
             qs.delete()
         else:
-            Like.objects.create(author=request.user, post_id=post)
+            Like.objects.create(author=request.user, post=post)
     return HttpResponseRedirect(reverse('board:post', args=[board_url, pk]))
 
 

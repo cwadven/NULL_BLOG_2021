@@ -25,7 +25,7 @@ class Command(BaseCommand):
         # seeder.add_entity(Post, int(number), {
         #     'def_tag' : None,
         #     'post_img' : None,
-        #     'board_id' : lambda x: random.choice(all_boards),
+        #     'board' : lambda x: random.choice(all_boards),
         #     'author' : lambda x: random.choice(all_users),
         # })
         # seeder.add_entity(Reply, int(number), {
