@@ -1,5 +1,13 @@
 # TECH BLOG
 
+## Service Address
+
+[edit . 2021-10-19]
+
+https://nulls.co.kr
+
+<img alt="logo.png" src="https://github.com/cwadven/NULL_BLOG_2021/blob/master/github_project_info_images/null_blog_logo.png?raw=true" width="100%" max-width="500px"/>
+
 ## Purpose Of Project
 
 [edit . 2021-10-19]
@@ -12,12 +20,6 @@
 
 - 내가 공부한 지식 및 꿀팁을 보관해 놓을 창고 역할을 하기 위한 목적
 - 지속적으로 습득한 지식을 이용해 보다 나은 모습으로 가꾸기 위한 목적
-
-## Service Address
-
-[edit . 2021-10-19]
-
-https://nulls.co.kr
 
 ## Project Duration
 
