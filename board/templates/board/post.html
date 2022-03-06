@@ -78,7 +78,7 @@
             let parent = e.currentTarget.offsetParent.children[0];
             const reply = document.createElement("div");
             reply.setAttribute("id", "rereply");
-            reply.setAttribute("class", "mt-2 py-1");
+            reply.setAttribute("class", "my-2 px-2");
             // 답글 버튼 공간 만들기
             const reply_submit = document.createElement("div");
             reply_submit.setAttribute("class", "text-end");
@@ -88,10 +88,19 @@
             form.method = "POST";
             form.action = "{% url 'board:rereply' post.board_id.url '00000' %}".replace('00000', parent.id.replace('reply_', ''));
             // 쓸 곳 만들기
+            const body_div = document.createElement("div");
+            body_div.setAttribute("class", "form-floating");
             const body_input = document.createElement("textarea");
             body_input.setAttribute("name", "rereply");
+            body_input.setAttribute("id", "floatingTextarea" + parent.id)
             body_input.setAttribute("class", "form-control mb-2");
+            body_input.style.height = "150px";
+            body_input.setAttribute("placeholder", "답글 작성");
             body_input.required = true;
+            // 쓸 곳 라벨 만들기
+            const body_input_label = document.createElement("label");
+            body_input_label.setAttribute("for", "floatingTextarea" + parent.id);
+            body_input_label.innerHTML = "답글 작성";
             // csrf
             const inputElem = document.createElement('input');
             inputElem.type = 'hidden';
@@ -99,13 +108,15 @@
             inputElem.value = '{{ csrf_token }}';
             // 버튼 만들기
             const submit = document.createElement("input")
-            submit.setAttribute("class", "btn btn-secondary fw-bolder");
+            submit.setAttribute("class", "btn-sm btn-secondary fw-bolder");
             submit.type = "submit"
             submit.value = "답글 작성"
             // 버튼 공간에 버튼 넣기
             reply_submit.appendChild(submit);
             // 폼에 쓸 것과 버튼 추가하기
-            form.appendChild(body_input);
+            body_div.appendChild(body_input);
+            body_div.appendChild(body_input_label);
+            form.appendChild(body_div);
             form.appendChild(inputElem);
             form.appendChild(reply_submit);
 
@@ -128,6 +139,10 @@
 
 {% block style %}
     <style>
+        p {
+            word-break: break-word;
+        }
+
         .other_post {
             text-decoration: auto;
         }
@@ -160,6 +175,7 @@
             content: "";
             display: table;
             table-layout: fixed;
+            z-index: 1000;
         }
 
         .progress-bar {
