@@ -4,12 +4,14 @@ from ckeditor_uploader.fields import RichTextUploadingField
 import re
 from django.urls import reverse
 
+
 class TimeStampedModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
     updated_at = models.DateTimeField(auto_now=True)
     
     class Meta:
         abstract = True
+
 
 # 태그
 class Tag(models.Model):
@@ -18,12 +20,14 @@ class Tag(models.Model):
     def __str__(self):
         return self.tag_name
 
+
 # 게시판 그룹
 class BoardGroup(TimeStampedModel):
     group_name = models.CharField(max_length=50)
 
     def __str__(self):
         return self.group_name
+
 
 # 게시판
 class Board(TimeStampedModel):
@@ -36,6 +40,7 @@ class Board(TimeStampedModel):
 
     def __str__(self):
         return self.url
+
 
 # 게시글
 class Post(TimeStampedModel):
@@ -80,6 +85,7 @@ class Post(TimeStampedModel):
             self.tag_save()
         return saved
 
+
 # 좋아요
 class Like(TimeStampedModel):
     post_id = models.ForeignKey(Post, related_name='likes', on_delete=models.CASCADE)
@@ -87,6 +93,7 @@ class Like(TimeStampedModel):
 
     def __str__(self):
         return self.id
+
 
 # 댓글
 class Reply(TimeStampedModel):
@@ -96,6 +103,7 @@ class Reply(TimeStampedModel):
 
     def __str__(self):
         return self.body
+
 
 # 답글
 class Rereply(TimeStampedModel):
@@ -112,6 +120,7 @@ class Rereply(TimeStampedModel):
         if self.reply_id:
             self.post_id = self.reply_id.post_id
         return super(Rereply, self).save(*args, **kwargs)
+
 
 # URL 강조
 class UrlImportant(TimeStampedModel):
