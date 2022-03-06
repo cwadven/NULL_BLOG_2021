@@ -158,7 +158,7 @@ def reply_write(request, board_url, pk):
     if request.method == 'POST' and request.user.is_authenticated:
         post = get_object_or_404(Post, board__url=board_url, pk=pk)
         if request.POST.get('reply_body'):
-            Reply.objects.create(post_id=post, author=request.user, body=request.POST.get('reply_body'))
+            Reply.objects.create(post=post, author=request.user, body=request.POST.get('reply_body'))
 
     return HttpResponseRedirect(reverse('board:post', args=[board_url, pk]))
 
@@ -168,18 +168,18 @@ def rereply_write(request, board_url, pk):
     reply = get_object_or_404(Reply, id=pk)
     if request.method == 'POST' and request.user.is_authenticated and request.POST.get('rereply'):
         rereply = Rereply()
-        rereply.reply_id = reply
+        rereply.reply = reply
         rereply.author = request.user
         rereply.body = request.POST.get('rereply')
         rereply.save()
-    return HttpResponseRedirect(reverse('board:post', args=[board_url, reply.post_id.id]))
+    return HttpResponseRedirect(reverse('board:post', args=[board_url, reply.post.id]))
 
 
 # 댓글 삭제
 def reply_delete(request, board_url, pk):
     if request.user.is_authenticated:
         reply = get_object_or_404(Reply, id=pk)
-        post_id = reply.post_id.id
+        post_id = reply.post.id
         if reply.author == request.user or request.user.is_superuser:
             reply.delete()
     return HttpResponseRedirect(reverse('board:post', args=[board_url, post_id]))
@@ -189,7 +189,7 @@ def reply_delete(request, board_url, pk):
 def rereply_delete(request, board_url, pk):
     if request.user.is_authenticated:
         rereply = get_object_or_404(Rereply, id=pk)
-        post_id = rereply.post_id.id
+        post_id = rereply.post.id
         if rereply.author == request.user or request.user.is_superuser:
             rereply.delete()
     return HttpResponseRedirect(reverse('board:post', args=[board_url, post_id]))

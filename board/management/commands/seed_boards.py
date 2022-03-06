@@ -33,9 +33,9 @@ class Command(BaseCommand):
         #     'author' : lambda x: random.choice(all_users),
         # })
         seeder.add_entity(Rereply, int(number), {
-            'post_id' : lambda x: random.choice(all_posts),
-            'reply_id' : lambda x: random.choice(all_replys),
-            'author' : lambda x: random.choice(all_users),
+            'post': lambda x: random.choice(all_posts),
+            'reply': lambda x: random.choice(all_replys),
+            'author': lambda x: random.choice(all_users),
         })
         # seeder.add_entity(Tag, int(number), {
         #     'tag_name' : lambda x: seeder.faker.user_name(),

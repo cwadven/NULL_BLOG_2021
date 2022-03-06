@@ -97,7 +97,7 @@ class Like(TimeStampedModel):
 
 # 댓글
 class Reply(TimeStampedModel):
-    post_id = models.ForeignKey(Post, related_name='replys', on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, related_name='replys', on_delete=models.CASCADE)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
     body = models.TextField()
 
@@ -107,24 +107,24 @@ class Reply(TimeStampedModel):
 
 # 답글
 class Rereply(TimeStampedModel):
-    post_id = models.ForeignKey(Post, on_delete=models.CASCADE)
-    reply_id = models.ForeignKey(Reply, related_name='rereplys', on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    reply = models.ForeignKey(Reply, related_name='rereplys', on_delete=models.CASCADE)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
     body = models.TextField()
 
     def __str__(self):
         return self.body
 
-    # 댓글의 post_id로 대댓글 post_id 저장
+    # 댓글의 post 로 대댓글 post 저장
     def save(self, *args, **kwargs): 
-        if self.reply_id:
-            self.post_id = self.reply_id.post_id
+        if self.reply:
+            self.post = self.reply.post
         return super(Rereply, self).save(*args, **kwargs)
 
 
 # URL 강조
 class UrlImportant(TimeStampedModel):
-    post_id = models.ForeignKey(Post, related_name='urlimportants', on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, related_name='urlimportants', on_delete=models.CASCADE)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
     url = models.CharField(max_length=255)
 
