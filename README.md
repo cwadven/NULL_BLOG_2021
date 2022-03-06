@@ -6,7 +6,7 @@
 
 https://nulls.co.kr
 
-<img alt="logo.png" src="https://github.com/cwadven/NULL_BLOG_2021/blob/master/github_project_info_images/null_blog_logo.png?raw=true" width="100%" max-width="500px"/>
+<img alt="logo.png" src="https://github.com/cwadven/NULL_BLOG_2021/blob/master/github_project_info_images/null_blog_logo.png?raw=true" style="width=100%; max-width=500px" />
 
 ## Purpose Of Project
 
