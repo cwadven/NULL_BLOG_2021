@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django_crontab',
     'ckeditor',
     'ckeditor_uploader',
-    'accounts',
+    'accounts.apps.AccountsConfig',
     'board',
     'control',
 ]
