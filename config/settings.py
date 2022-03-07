@@ -18,7 +18,7 @@ else:
     DEBUG = False
     ALLOWED_HOSTS = ["nulls.co.kr"]
 
-INSTALLED_APPS = [
+DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -28,6 +28,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django.contrib.humanize',
+]
+
+THIRD_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -35,14 +38,22 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.kakao',
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.github',
-    'django_seed',
-    'django_crontab',
     'ckeditor',
     'ckeditor_uploader',
+    'django_crontab',
+]
+
+PROJECT_APPS = [
     'accounts.apps.AccountsConfig',
     'board',
     'control',
 ]
+
+PROJECT_SETTING_APPS = [
+    'django_seed',
+]
+
+INSTALLED_APPS = DJANGO_APPS + THIRD_APPS + PROJECT_APPS + PROJECT_SETTING_APPS
 
 CKEDITOR_UPLOAD_PATH = "post-body/"
 
