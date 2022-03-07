@@ -151,6 +151,7 @@
             <div class="col-sm-12 col-md-7 col-lg-8 col-xl-8 col-xxl-9">{% block middle_left %}{% endblock %}</div>
             <div class="col-sm-12 col-md-5 col-lg-4 col-xl-4 col-xxl-3">
                 {% block middle_right %}{% endblock %}
+                {% if request.path != '/accounts/signup' %}
                 <div class="my-3 p-3 rounded border">
                     <div>
                         <span class="fw-bolder">Yesterday:</span> {{ visitor_info.yesterday|intcomma }}
@@ -159,6 +160,7 @@
                         <span class="fw-bolder">Today:</span>  {{ visitor_info.today|intcomma }}
                     </div>
                 </div>
+                {% endif %}
             </div>
         </div>
     </div>
