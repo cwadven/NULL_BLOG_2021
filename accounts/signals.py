@@ -8,7 +8,6 @@ from accounts.models import User
 
 
 @receiver(post_save, sender=SocialAccount)
-# 네이버로 가입한 계정에 사용자 이름을 추가
 def receiver_social_signup(sender, instance, created, *args, **kwargs):
     if created:
         social_info = instance.user.socialaccount_set.all()[0]
