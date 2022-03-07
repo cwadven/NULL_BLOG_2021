@@ -27,30 +27,31 @@ def login(request):
 
 def logout(request):
     auth.logout(request)
-    return redirect('/')
+    return HttpResponseRedirect('/')
 
 
 def signup(request):
     if request.method == 'POST':
-        signup = SignupForm(request.POST, request.FILES)
-        if signup.is_valid():
+        sign_up_form = SignupForm(request.POST, request.FILES)
+
+        if sign_up_form.is_valid():
             user = User.objects.create_user(
-                username=signup.cleaned_data['username'],
-                password=signup.cleaned_data['password'],
-                nickname=signup.cleaned_data['nickname'],
-                email=signup.cleaned_data['email'],
-                user_img=signup.cleaned_data['user_img'],
+                username=sign_up_form.cleaned_data['username'],
+                password=sign_up_form.cleaned_data['password'],
+                nickname=sign_up_form.cleaned_data['nickname'],
+                email=sign_up_form.cleaned_data['email'],
+                user_img=sign_up_form.cleaned_data['user_img'],
             )
             auth.login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             return HttpResponseRedirect('/')
         else:
             context = {
-                'signup': signup,
+                'sign_up_form': sign_up_form,
             }
             return render(request, 'accounts/signup.html', context)
     else:
-        signup = SignupForm()
+        sign_up_form = SignupForm()
         context = {
-            'signup': signup,
+            'sign_up_form': sign_up_form,
         }
         return render(request, 'accounts/signup.html', context)

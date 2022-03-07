@@ -23,7 +23,7 @@ html, body {
         <h3 class="text-center">회원가입</h3>
         <form class="d-grid gap-2" method="POST" action="" enctype="multipart/form-data">
             {% csrf_token %}
-            {{signup.as_p}}
+            {{sign_up_form.as_p}}
             <input class="btn" type="submit" style="background-color: rgb(136, 192, 238);background-size:30px auto;" value="가입하기"/>
         </form>
     </div>
