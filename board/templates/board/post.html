@@ -296,7 +296,7 @@
                                          src="{{ reply.author.user_img.url }}" alt="{{ reply.author.nickname }}">
                                 {% else %}
                                     <img class="img-thumbnail align-middle" style="max-width:70px;max-height: 70px;"
-                                         src="{% static 'noimage.jpg' %}" alt="{{ reply.author.nickname }}">
+                                         src="{% static 'logo.ico' %}" alt="{{ reply.author.nickname }}">
                                 {% endif %}
                                 <div>{{ reply.author.nickname }}</div>
                             </div>
@@ -328,7 +328,7 @@
                                              alt="{{ rereply.author.nickname }}">
                                     {% else %}
                                         <img class="img-thumbnail align-middle" style="max-width:70px;max-height: 70px;"
-                                             src="{% static 'noimage.jpg' %}" alt="{{ rereply.author.nickname }}">
+                                             src="{% static 'logo.ico' %}" alt="{{ rereply.author.nickname }}">
                                     {% endif %}
                                     <div>{{ rereply.author.nickname }}</div>
                                 </div>
