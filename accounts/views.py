@@ -2,7 +2,7 @@ import json
 
 from django.shortcuts import render, redirect
 from django.contrib import auth
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest
 
 from .forms import SignupForm
 from .models import User
@@ -15,11 +15,14 @@ def login(request):
 
         user = auth.authenticate(request, username=username, password=password)
 
-        if user is not None:
-            auth.login(request, user)
-            return HttpResponse(json.dumps({'works': True}), 'application/json')
-        else:
-            return HttpResponse(json.dumps({'works': False, 'error_message': '아이디 혹은 비밀번호 오류'}), 'application/json')
+        context = json.dumps({})
+
+        if user is None:
+            context = json.dumps({'error': '🚫 아이디 혹은 비밀번호 오류 🚫'})
+            return HttpResponseBadRequest(context, 'application/json')
+
+        auth.login(request, user)
+        return HttpResponse(context, 'application/json')
 
 
 def logout(request):

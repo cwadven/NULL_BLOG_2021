@@ -32,14 +32,51 @@
       gtag('config', 'G-BVB1G38F8L');
     </script>
     <script>
+    onLoginRequire = () => {
+        $('#login_message').removeClass("alert-danger");
+        $('#login_message').addClass("alert-secondary");
+        $('#login_message').html("로그인 해주세요!");
+    }
+
+    onLoginSuccess = () => {
+        $('#login_message').removeClass("alert-secondary");
+        $('#login_message').removeClass("alert-danger");
+        $('#login_message').addClass("alert-success");
+        $('#login_message').html("로그인 중 ...");
+    }
+
+    onLoginFail = (msg) => {
+        $('#login_message').removeClass("alert-secondary");
+        $('#login_message').addClass("alert-danger");
+        $('#login_message').html(msg);
+    }
+
+    ajaxLogin = (e) => {
+        e.preventDefault();
+
+        const request = $.ajax({
+            method: 'POST',
+            url: "{% url 'accounts:login' %}",
+            async: false,
+            data: $('.login-form').serialize()
+        });
+        request.done(function (data){
+            onLoginSuccess();
+            $(location).attr('href', location.origin);
+        });
+        request.fail(function (data, textStatus, errorThrown){
+            onLoginFail(data.responseJSON.error);
+        });
+    }
+
     $(function () {
         $('.login-form').on('submit', function(e){
-            AjaxLogin(e);
+            ajaxLogin(e);
         });
 
         $('.login-form input').on('propertychange change keyup paste ', function(e){
-            if ($('#error_message').html() === "아이디 혹은 비밀번호 오류") {
-                $('#error_message').html("로그인 해주세요!")
+            if (e.keyCode !== 13) {
+                onLoginRequire();
             }
         });
 
@@ -47,35 +84,6 @@
             $(location).attr('href', location.origin);
         })
     });
-
-    AjaxLogin = (e) => {
-        e.preventDefault();
-        // 백엔드 서버에 요청
-        var request = $.ajax({
-            method: 'POST',
-            // html 맨 위에 설정한 urls
-            url: "{% url 'accounts:login' %}",
-            async: false,
-            data: $('.login-form').serialize()
-        });
-        request.done(function (data){
-            if (data.works){
-                $(location).attr('href', location.origin);
-            } else {
-                $('#error_message').html(data.error_message);
-            }
-        });
-        request.fail(function (jqXHR, textStatus){
-            if (jqXHR.status == 404){
-                alert("페이지가 존재하지 않습니다.");
-            } else if (jqXHR.status == 403) {
-                alert("로그인 해주세요.");
-            } else {
-                alert("문제가 발생했습니다. 다시 시도해주세요.");
-            }
-        });
-        return false;
-    }
     </script>
     {% block script %}
     {% endblock %}
@@ -182,7 +190,7 @@
                         </div>
                     </form>
                 </div>
-                <div id="error_message" class="alert alert-danger text-center" role="alert">로그인 해주세요!</div>
+                <div id="login_message" class="alert alert-secondary text-center" role="alert">로그인 해주세요!</div>
                 <div class="mb-3">
                     <div class="fw-bold mb-2">소셜 로그인</div>
                     <div class="d-grid gap-2">
