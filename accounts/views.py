@@ -1,11 +1,13 @@
+import json
+
 from django.shortcuts import render, redirect
 from django.contrib import auth
 from django.http import HttpResponse, HttpResponseRedirect
+
 from .forms import SignupForm
 from .models import User
-import json
 
-# Create your views here.
+
 def login(request):
     if request.method == 'POST':
         username = request.POST.get("username")
@@ -15,13 +17,15 @@ def login(request):
 
         if user is not None:
             auth.login(request, user)
-            return HttpResponse(json.dumps({'works':True,}), 'application/json')
+            return HttpResponse(json.dumps({'works': True}), 'application/json')
         else:
-            return HttpResponse(json.dumps({'works':False, 'error_message':'아이디 혹은 비밀번호 오류'}), 'application/json')
+            return HttpResponse(json.dumps({'works': False, 'error_message': '아이디 혹은 비밀번호 오류'}), 'application/json')
+
 
 def logout(request):
     auth.logout(request)
     return redirect('/')
+
 
 def signup(request):
     if request.method == 'POST':
@@ -38,12 +42,12 @@ def signup(request):
             return HttpResponseRedirect('/')
         else:
             context = {
-                'signup':signup,
+                'signup': signup,
             }
             return render(request, 'accounts/signup.html', context)
     else:
         signup = SignupForm()
         context = {
-            'signup':signup,
+            'signup': signup,
         }
         return render(request, 'accounts/signup.html', context)
