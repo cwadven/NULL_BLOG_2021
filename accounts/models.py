@@ -4,10 +4,7 @@ from io import BytesIO
 
 from django.core.files import File
 from django.contrib.auth.models import AbstractUser
-from django.db import models, transaction
-from django.db.models.signals import post_save
-
-from allauth.socialaccount.models import SocialAccount
+from django.db import models
 
 
 class User(AbstractUser):
