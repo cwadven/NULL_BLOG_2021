@@ -64,7 +64,7 @@ def board(request, board_url):
 
     context = {
         'posts': paging_obj.get('page_posts'),
-        "page_range": paging_obj.get('page_range'),
+        'page_range': paging_obj.get('page_range'),
         'board': board_obj,
     }
 
@@ -76,41 +76,26 @@ def post_search(request):
     q = Q()
 
     if request.GET.get('search'):
-        tag_id_list = Tag.objects.filter(tag_name__icontains=request.GET.get('search')).values_list('id', flat=True)
-        q = q & Q(title__icontains=request.GET.get('search')) | Q(body__icontains=request.GET.get('search')) | Q(
-            tag_set__in=tag_id_list)
+        tag_id_list = Tag.objects.filter(
+            tag_name__icontains=request.GET.get('search')
+        ).values_list(
+            'id', flat=True
+        )
+
+        q = q & Q(title__icontains=request.GET.get('search')) | Q(body__icontains=request.GET.get('search')) | Q(tag_set__in=tag_id_list)
 
     posts = Post.objects.filter(q).annotate(
         reply_count=Count('replys', distinct=True) + Count('rereply', distinct=True),
         like_count=Count('likes', distinct=True),
-    ).order_by('-created_at')
+    ).order_by(
+        '-created_at'
+    )
 
-    # 페이지네이션 만들기
-    posts = Paginator(posts, 10)
-
-    page = request.GET.get('page')
-
-    # 페이지 보이게 하는 숫자 구간
-    page_numbers_range = 5
-
-    # 최대 녀석이 있을 경우 최대 까지만 보이도록 하기 위해서!
-    max_index = len(posts.page_range)
-
-    # 페이지가 0일 경우 1로 변경 current_page에 넣기
-    current_page = int(page) if page else 1
-    start_index = int((current_page - 1) / page_numbers_range) * page_numbers_range
-    end_index = start_index + page_numbers_range
-
-    if end_index >= max_index:
-        end_index = max_index
-
-    page_range = posts.page_range[start_index:end_index]
-
-    posts = posts.get_page(page)  # 페이지네이션 만들기
+    paging_obj = web_paging(request, posts, 10, 5)
 
     context = {
-        "page_range": page_range,
-        'posts': posts,
+        'posts': paging_obj.get('page_posts'),
+        'page_range': paging_obj.get('page_range'),
     }
 
     return render(request, 'board/search_board.html', context)
@@ -118,9 +103,13 @@ def post_search(request):
 
 # 자세한 글 보기
 def post_detail(request, board_url, pk):
-    qs = Post.objects.filter(board__url=board_url).select_related(
+    qs = Post.objects.filter(
+        board__url=board_url
+    ).select_related(
         'board'
-    ).order_by('-id')
+    ).order_by(
+        '-id'
+    )
 
     prev_post = qs.filter(id__lt=pk).first()
     next_post = qs.filter(id__gt=pk).order_by('id').first()
