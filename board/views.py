@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 
+from common_library import web_paging
 from .models import *
 from control.models import *
 from django.db.models import Count, Q
@@ -9,16 +10,24 @@ from django.core.paginator import Paginator
 
 
 def home(request):
-    recent_post_set = Post.objects.order_by('-id')[:6]
+    recent_post_set = Post.objects.order_by(
+        '-id'
+    )[:6]
 
     liked_ordered_post_set = Post.objects.annotate(
         reply_count=Count('replys', distinct=True) + Count('rereply', distinct=True),
         like_count=Count('likes', distinct=True),
-    ).order_by('-like_count', '-reply_count', '-id')[:6]
+    ).order_by(
+        '-like_count',
+        '-reply_count',
+        '-id',
+    )[:6]
 
     tag_set = Tag.objects.all()
 
-    announce_set = Announce.objects.order_by('-created_at')[:5]
+    announce_set = Announce.objects.order_by(
+        '-created_at'
+    )[:5]
 
     context = {
         'recent_post_set': recent_post_set,
@@ -35,42 +44,28 @@ def board(request, board_url):
     q = Q()
 
     if request.GET.get('search'):
-        tag_id_list = Tag.objects.filter(tag_name__icontains=request.GET.get('search')).values_list('id', flat=True)
+        tag_id_list = Tag.objects.filter(
+            tag_name__icontains=request.GET.get('search')
+        ).values_list(
+            'id', flat=True
+        )
+
         q = q & Q(title__icontains=request.GET.get('search')) | Q(body__icontains=request.GET.get('search')) | Q(tag_set__in=tag_id_list)
 
-    board = get_object_or_404(Board, url=board_url)
-    posts = board.post_set.filter(q).annotate(
+    board_obj = get_object_or_404(Board, url=board_url)
+    posts = board_obj.post_set.filter(q).annotate(
         reply_count=Count('replys', distinct=True) + Count('rereply', distinct=True),
         like_count=Count('likes', distinct=True),
-    ).order_by('-created_at')
+    ).order_by(
+        '-created_at'
+    )
 
-    # 페이지네이션 만들기
-    posts = Paginator(posts, 10)
-
-    page = request.GET.get('page')
-
-    # 페이지 보이게 하는 숫자 구간
-    page_numbers_range = 5
-
-    # 최대 녀석이 있을 경우 최대 까지만 보이도록 하기 위해서!
-    max_index = len(posts.page_range)
-
-    # 페이지가 0일 경우 1로 변경 current_page에 넣기
-    current_page = int(page) if page else 1
-    start_index = int((current_page - 1) / page_numbers_range) * page_numbers_range
-    end_index = start_index + page_numbers_range
-
-    if end_index >= max_index:
-        end_index = max_index
-
-    page_range = posts.page_range[start_index:end_index]
-
-    posts = posts.get_page(page)  # 페이지네이션 만들기
+    paging_obj = web_paging(request, posts, 10, 5)
 
     context = {
-        "page_range": page_range,
-        'board': board,
-        'posts': posts,
+        'posts': paging_obj.get('page_posts'),
+        "page_range": paging_obj.get('page_range'),
+        'board': board_obj,
     }
 
     return render(request, 'board/board.html', context)
