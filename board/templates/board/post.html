@@ -257,7 +257,7 @@
     <div class="extra-info">
         <div class="mb-2">
             {% for tag in post.tag_set.all %}
-                <a href="{% url 'board:tag_board' tag.tag_name %}" class="text-decoration-none">#{{ tag.tag_name }}</a>
+                <a href="{% url 'board:board' '_'|add:tag.tag_name %}" class="text-decoration-none">#{{ tag.tag_name }}</a>
             {% endfor %}
         </div>
         <!-- 댓글 작성 -->
