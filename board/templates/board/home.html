@@ -92,7 +92,7 @@
 
 {% block middle_right %}
 <!-- 검색 하기 -->
-<form class="d-flex mb-3" style="justify-content: flex-end;" method="get" action="{% url 'board:post_search' %}">
+<form class="d-flex mb-3" style="justify-content: flex-end;" method="get" action="{% url 'board:board' 'search' %}">
     <input class="me-2" type="text" value="{{ request.GET.search }}" name="search" placeholder="검색어를 입력하세요." />
     <button class="btn btn-sm btn-primary" type="submit">검색</button>
 </form>
@@ -125,7 +125,7 @@
     <h5>TAGS</h5>
     <div class="d-flex flex-wrap">
         {% for tags in tag_set %}
-            <a href="{% url 'board:tag_board' tags.tag_name %}" class="badge bg-primary m-1 text-decoration-none text-white">{{tags.tag_name}} <span class="badge rounded-pill bg-light text-primary">{{tags.post_set.count}}</span></a>
+            <a href="{% url 'board:board' '_'|add:tags.tag_name %}" class="badge bg-primary m-1 text-decoration-none text-white">{{tags.tag_name}} <span class="badge rounded-pill bg-light text-primary">{{tags.post_set.count}}</span></a>
         {% endfor %}
     </div>
 </div>

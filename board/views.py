@@ -43,22 +43,61 @@ def home(request):
 def board(request, board_url):
     q = Q()
 
-    if request.GET.get('search'):
+    board_obj = None
+    tag_board = None
+
+    # page:
+    # 1 게시판 페이지
+    # 2 태그 페이지
+    # 3 검색 페이지
+    page = 1
+
+    search = request.GET.get('search')
+
+    # 태그 페이지
+    if board_url[0] == '_':
+        page = 2
+        tag_option = board_url[1:]
+
+    # 검색 페이지
+    if board_url == 'search':
+        page = 3
+
+    if search:
         tag_id_list = Tag.objects.filter(
-            tag_name__icontains=request.GET.get('search')
+            tag_name__icontains=search
         ).values_list(
             'id', flat=True
         )
 
-        q = q & Q(title__icontains=request.GET.get('search')) | Q(body__icontains=request.GET.get('search')) | Q(tag_set__in=tag_id_list)
+        q = q & Q(title__icontains=search) | Q(body__icontains=search) | Q(tag_set__in=tag_id_list)
 
-    board_obj = get_object_or_404(Board, url=board_url)
-    posts = board_obj.post_set.filter(q).annotate(
-        reply_count=Count('replys', distinct=True) + Count('rereply', distinct=True),
-        like_count=Count('likes', distinct=True),
-    ).order_by(
-        '-created_at'
-    )
+    # 게시판 선택
+    if page == 1:
+        board_obj = get_object_or_404(Board, url=board_url)
+        posts = board_obj.post_set.filter(q).annotate(
+            reply_count=Count('replys', distinct=True) + Count('rereply', distinct=True),
+            like_count=Count('likes', distinct=True),
+        ).order_by(
+            '-created_at'
+        )
+    # 태그 검색
+    elif page == 2:
+        tag_board = get_object_or_404(Tag, tag_name=tag_option)
+        posts = tag_board.post_set.filter(q).annotate(
+            reply_count=Count('replys', distinct=True) + Count('rereply', distinct=True),
+            like_count=Count('likes', distinct=True),
+        ).order_by(
+            '-created_at'
+        )
+    # 전체 검색
+    elif page == 3:
+        posts = Post.objects.filter(q).annotate(
+            reply_count=Count('replys', distinct=True) + Count('rereply', distinct=True),
+            like_count=Count('likes', distinct=True),
+        ).order_by(
+            '-created_at'
+        )
 
     paging_obj = web_paging(request, posts, 10, 5)
 
@@ -66,39 +105,10 @@ def board(request, board_url):
         'posts': paging_obj.get('page_posts'),
         'page_range': paging_obj.get('page_range'),
         'board': board_obj,
+        'tag_board': tag_board,
     }
 
     return render(request, 'board/board.html', context)
-
-
-# 글 찾기
-def post_search(request):
-    q = Q()
-
-    if request.GET.get('search'):
-        tag_id_list = Tag.objects.filter(
-            tag_name__icontains=request.GET.get('search')
-        ).values_list(
-            'id', flat=True
-        )
-
-        q = q & Q(title__icontains=request.GET.get('search')) | Q(body__icontains=request.GET.get('search')) | Q(tag_set__in=tag_id_list)
-
-    posts = Post.objects.filter(q).annotate(
-        reply_count=Count('replys', distinct=True) + Count('rereply', distinct=True),
-        like_count=Count('likes', distinct=True),
-    ).order_by(
-        '-created_at'
-    )
-
-    paging_obj = web_paging(request, posts, 10, 5)
-
-    context = {
-        'posts': paging_obj.get('page_posts'),
-        'page_range': paging_obj.get('page_range'),
-    }
-
-    return render(request, 'board/search_board.html', context)
 
 
 # 자세한 글 보기
@@ -189,48 +199,3 @@ def like(request, board_url, pk):
         else:
             Like.objects.create(author=request.user, post=post)
     return HttpResponseRedirect(reverse('board:post', args=[board_url, pk]))
-
-
-def tag_board(request, tag_name):
-    q = Q()
-
-    if request.GET.get('search'):
-        tag_id_list = Tag.objects.filter(tag_name__icontains=request.GET.get('search')).values_list('id', flat=True)
-        q = q & Q(title__icontains=request.GET.get('search')) | Q(body__icontains=request.GET.get('search')) | Q(
-            tag_set__in=tag_id_list)
-
-    tag_board = get_object_or_404(Tag, tag_name=tag_name)
-    posts = tag_board.post_set.filter(q).annotate(
-        reply_count=Count('replys', distinct=True) + Count('rereply', distinct=True),
-        like_count=Count('likes', distinct=True),
-    ).order_by('-created_at')
-
-    # 페이지네이션 만들기
-    posts = Paginator(posts, 10)
-
-    page = request.GET.get('page')
-
-    # 페이지 보이게 하는 숫자 구간
-    page_numbers_range = 5
-
-    # 최대 녀석이 있을 경우 최대 까지만 보이도록 하기 위해서!
-    max_index = len(posts.page_range)
-
-    # 페이지가 0일 경우 1로 변경 current_page에 넣기
-    current_page = int(page) if page else 1
-    start_index = int((current_page - 1) / page_numbers_range) * page_numbers_range
-    end_index = start_index + page_numbers_range
-
-    if end_index >= max_index:
-        end_index = max_index
-
-    page_range = posts.page_range[start_index:end_index]
-
-    posts = posts.get_page(page)  # 페이지네이션 만들기
-
-    context = {
-        "page_range": page_range,
-        'tag_board': tag_board,
-        'posts': posts,
-    }
-    return render(request, 'board/board.html', context)

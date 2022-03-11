@@ -19,18 +19,22 @@
 </style>
 {% endblock %}
 
-{% block title %}{{board.name}} 게시판{% endblock %}
-{% block og_title %}{{board.name}} 게시판{% endblock %}
-{% block description %}{{board.info|striptags}}{% endblock %}
+{% block title %}{% if board %}{{ board.name }} 게시판{% elif tag_board %}{{tag_board.tag_name}} 태그{% else %}{{ request.GET.search }}{% endif %}{% endblock %}
+{% block og_title %}{% if board %}{{ board.name }} 게시판{% elif tag_board %}{{tag_board.tag_name}} 태그{% else %}{{ request.GET.search }}{% endif %}{% endblock %}
+{% block description %}{% if board %}{{board.info|striptags}}{% elif tag_board %}{{tag_board.tag_name}} 태그{% else %}{{ request.GET.search }}{% endif %}{% endblock %}
 {% block current_url %}https://nulls.co.kr{{ request.get_full_path }}{% endblock %}
-{% block img %}{% if board.board_img %}https://nulls.co.kr{{ board.board_img.url }}{% else %}https://nulls.co.kr/static/logo.ico{% endif %}{% endblock %}
+{% block img %}{% if board %}{% if board.board_img %}https://nulls.co.kr{{ board.board_img.url }}{% else %}https://nulls.co.kr/static/logo.ico{% endif %}{% else %}{{ request.GET.search }}{% endif %}{% endblock %}
 
 {% block top %}
 <!-- 게시판 소개 및 이미지 -->
-{% if board.board_img %}
-<div class="p-4 p-md-5 mb-3 text-white rounded" style="background-image:url({{board.board_img.url}});background-size:cover;background-position:center center;">
+{% if board %}
+    {% if board.board_img %}
+    <div class="p-4 p-md-5 mb-3 text-white rounded" style="background-image:url({{board.board_img.url}});background-size:cover;background-position:center center;">
+    {% else %}
+        <div class="p-4 p-md-5 mb-3 rounded">
+    {% endif %}
 {% else %}
-<div class="p-4 p-md-5 mb-3 rounded">
+    <div class="p-4 p-md-5 mb-3 rounded">
 {% endif %}
     <div class="col-md-8 px-0">
         <h3 class="display-4">{{board.name}}</h3>
@@ -40,6 +44,12 @@
     <div class="col-md-8 px-0">
         <h3 class="display-4 font-monospace">#{{tag_board.tag_name}}</h3>
         <p class="lead my-3 font-monospace">WHAT WE TAGS {{tag_board.tag_name}} LIST</p>
+    </div>
+    {% endif %}
+    {% if not tag_board and not board %}
+    <div class="col-md-8 px-0">
+        <h3 class="display-4 font-monospace">{{ request.GET.search }}</h3>
+        <p class="lead my-3 font-monospace">WHAT WE FOUND "{{ request.GET.search }}" LIST</p>
     </div>
     {% endif %}
 </div>
