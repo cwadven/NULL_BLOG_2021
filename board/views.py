@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 
@@ -146,8 +147,9 @@ def post_detail(request, board_url, pk):
 
 
 # 댓글 작성
+@login_required(login_url='/')
 def reply_write(request, board_url, pk):
-    if request.method == 'POST' and request.user.is_authenticated:
+    if request.method == 'POST':
         post = get_object_or_404(Post, board__url=board_url, pk=pk)
         if request.POST.get('reply_body'):
             Reply.objects.create(post=post, author=request.user, body=request.POST.get('reply_body'))
@@ -156,9 +158,10 @@ def reply_write(request, board_url, pk):
 
 
 # 답글 작성
+@login_required(login_url='/')
 def rereply_write(request, board_url, pk):
     reply = get_object_or_404(Reply, id=pk)
-    if request.method == 'POST' and request.user.is_authenticated and request.POST.get('rereply'):
+    if request.method == 'POST' and request.POST.get('rereply'):
         rereply = Rereply()
         rereply.reply = reply
         rereply.author = request.user
@@ -168,32 +171,32 @@ def rereply_write(request, board_url, pk):
 
 
 # 댓글 삭제
+@login_required(login_url='/')
 def reply_delete(request, board_url, pk):
-    if request.user.is_authenticated:
-        reply = get_object_or_404(Reply, id=pk)
-        post_id = reply.post.id
-        if reply.author == request.user or request.user.is_superuser:
-            reply.delete()
+    reply = get_object_or_404(Reply, id=pk)
+    post_id = reply.post.id
+    if reply.author == request.user or request.user.is_superuser:
+        reply.delete()
     return HttpResponseRedirect(reverse('board:post', args=[board_url, post_id]))
 
 
 # 답글 삭제
+@login_required(login_url='/')
 def rereply_delete(request, board_url, pk):
-    if request.user.is_authenticated:
-        rereply = get_object_or_404(Rereply, id=pk)
-        post_id = rereply.post.id
-        if rereply.author == request.user or request.user.is_superuser:
-            rereply.delete()
+    rereply = get_object_or_404(Rereply, id=pk)
+    post_id = rereply.post.id
+    if rereply.author == request.user or request.user.is_superuser:
+        rereply.delete()
     return HttpResponseRedirect(reverse('board:post', args=[board_url, post_id]))
 
 
 # 좋아요 추가 삭제
+@login_required(login_url='/')
 def like(request, board_url, pk):
     post = get_object_or_404(Post, id=pk)
-    if request.user.is_authenticated:
-        qs = Like.objects.filter(author=request.user, post=post)
-        if qs.exists():
-            qs.delete()
-        else:
-            Like.objects.create(author=request.user, post=post)
+    qs = Like.objects.filter(author=request.user, post=post)
+    if qs.exists():
+        qs.delete()
+    else:
+        Like.objects.create(author=request.user, post=post)
     return HttpResponseRedirect(reverse('board:post', args=[board_url, pk]))
