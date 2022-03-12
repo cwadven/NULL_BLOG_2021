@@ -6,8 +6,6 @@ from .models import *
 from control.models import *
 from django.db.models import Count, Q
 
-from django.core.paginator import Paginator
-
 
 def home(request):
     recent_post_set = Post.objects.order_by(
