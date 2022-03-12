@@ -11,6 +11,10 @@ class User(AbstractUser):
     nickname = models.CharField(max_length=30)
     user_img = models.ImageField(upload_to='user_img/', null=True, blank=True)
 
+    class Meta:
+        verbose_name = "사용자"
+        verbose_name_plural = "사용자"
+
     def __str__(self):
         return '%s' % self.username
 
