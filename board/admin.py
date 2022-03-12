@@ -7,9 +7,6 @@ class RereplyInline(admin.TabularInline):
 
 
 class ReplyInline(admin.TabularInline):
-    inlines = [
-        RereplyInline
-    ]
     model = Reply
 
 
@@ -43,16 +40,36 @@ class PostAdmin(admin.ModelAdmin):
     inlines = [
         UrlImportantInline,
         ReplyInline,
+        RereplyInline,
         LikeInline,
     ]
-
+    list_filter = (
+        'board__name',
+    )
+    search_fields = (
+        'title',
+        'body',
+        'author__username',
+        'author__nickname',
+        'author__email',
+    )
     list_display = (
         'id',
         'author',
         'board_name',
         'title',
-        '_tag_set'
+        '_tag_set',
+        '_comment_count',
+        '_like_count',
     )
+
+    def get_queryset(self, request):
+        qs = super(PostAdmin, self).get_queryset(request)
+        qs = qs.annotate(
+            _comment_count=models.Count('replys', distinct=True) + models.Count('rereply', distinct=True),
+            _like_count=models.Count('likes', distinct=True),
+        )
+        return qs
 
     def board_name(self, obj):
         if obj.board:
@@ -68,6 +85,15 @@ class PostAdmin(admin.ModelAdmin):
         if obj.tag_set.exists():
             return ", ".join([tag.tag_name for tag in obj.tag_set.all()])
         return None
+
+    def _comment_count(self, obj):
+        return obj._comment_count
+
+    def _like_count(self, obj):
+        return obj._like_count
+
+    _comment_count.admin_order_field = '_comment_count'
+    _like_count.admin_order_field = '_like_count'
 
 
 @admin.register(Tag)
