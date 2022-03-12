@@ -17,6 +17,10 @@ class TimeStampedModel(models.Model):
 class Tag(models.Model):
     tag_name = models.CharField(max_length=140, unique=True, db_index=True)
 
+    class Meta:
+        verbose_name = "태그 목록"
+        verbose_name_plural = "태그 목록"
+
     def __str__(self):
         return self.tag_name
 
@@ -24,6 +28,10 @@ class Tag(models.Model):
 # 게시판 그룹
 class BoardGroup(TimeStampedModel):
     group_name = models.CharField(max_length=50)
+
+    class Meta:
+        verbose_name = "게시판 종류"
+        verbose_name_plural = "게시판 종류"
 
     def __str__(self):
         return self.group_name
@@ -38,6 +46,10 @@ class Board(TimeStampedModel):
     board_group = models.ForeignKey(BoardGroup, on_delete=models.SET_NULL, null=True, blank=True)
     attribute = models.IntegerField(default=0, db_index=True)
 
+    class Meta:
+        verbose_name = "게시판"
+        verbose_name_plural = "게시판"
+
     def __str__(self):
         return self.url
 
@@ -51,6 +63,10 @@ class Post(TimeStampedModel):
     board = models.ForeignKey(Board, on_delete=models.CASCADE)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='posts', on_delete=models.CASCADE)
     tag_set = models.ManyToManyField('Tag', blank=True)
+
+    class Meta:
+        verbose_name = "게시글"
+        verbose_name_plural = "게시글"
 
     def __str__(self):
         return self.title
@@ -91,6 +107,10 @@ class Like(TimeStampedModel):
     post = models.ForeignKey(Post, related_name='likes', on_delete=models.CASCADE)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
 
+    class Meta:
+        verbose_name = "게시글 좋아요"
+        verbose_name_plural = "게시글 좋아요"
+
     def __str__(self):
         return self.id
 
@@ -100,6 +120,10 @@ class Reply(TimeStampedModel):
     post = models.ForeignKey(Post, related_name='replys', on_delete=models.CASCADE)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
     body = models.TextField()
+
+    class Meta:
+        verbose_name = "댓글"
+        verbose_name_plural = "댓글"
 
     def __str__(self):
         return self.body
@@ -111,6 +135,10 @@ class Rereply(TimeStampedModel):
     reply = models.ForeignKey(Reply, related_name='rereplys', on_delete=models.CASCADE)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
     body = models.TextField()
+
+    class Meta:
+        verbose_name = "답글(댓글의댓글)"
+        verbose_name_plural = "답글(댓글의댓글)"
 
     def __str__(self):
         return self.body
@@ -127,6 +155,10 @@ class UrlImportant(TimeStampedModel):
     post = models.ForeignKey(Post, related_name='urlimportants', on_delete=models.CASCADE)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
     url = models.CharField(max_length=255)
+    
+    class Meta:
+        verbose_name = "URL 강조"
+        verbose_name_plural = "URL 강조"
 
     def __str__(self):
         return self.url
