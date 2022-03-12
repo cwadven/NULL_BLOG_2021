@@ -16,16 +16,16 @@ info_dict = {
 urlpatterns = [
     path('admin', admin.site.urls),
     # SEO 용
-    path('sitemap.xml', sitemap, {'sitemaps': {'board': GenericSitemap(info_dict, priority=0.6)}},
-         name='django.contrib.sitemaps.views.sitemap'),
-    path('robots.txt',
-         lambda x: HttpResponse("User-Agent: *\nDisallow: /admin/\nDisallow: /account/\nAllow: /",
-                                content_type="text/plain")),
+    path('sitemap.xml', sitemap, {'sitemaps': {'board': GenericSitemap(info_dict, priority=0.6)}}, name='django.contrib.sitemaps.views.sitemap'),
+    path('robots.txt', lambda x: HttpResponse("User-Agent: *\nDisallow: /admin/\nDisallow: /account/\nAllow: /", content_type="text/plain")),
     path('', include('board.urls')),
-    # 일반 로그인 용
+
+    # 일반 로그인
     path('accounts/', include('accounts.urls')),
-    # social 용
+    # 소셜 로그인
     path('accounts/', include('allauth.urls')),
+
+    # ckeditor
     path('ckeditor/', include('ckeditor_uploader.urls')),
 ]
 
