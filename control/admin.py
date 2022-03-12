@@ -1,6 +1,30 @@
 from django.contrib import admin
 from .models import *
 
-admin.site.register(Announce)
-admin.site.register(IPVisitant)
-admin.site.register(TodayYesterday)
+
+@admin.register(Announce)
+class AnnounceAdmin(admin.ModelAdmin):
+    list_display = (
+        'id',
+        'title',
+        'body',
+    )
+
+
+@admin.register(IPVisitant)
+class IPVisitantAdmin(admin.ModelAdmin):
+    list_display = (
+        'id',
+        'ip',
+        'created_at',
+    )
+
+
+@admin.register(TodayYesterday)
+class TodayYesterdayAdmin(admin.ModelAdmin):
+    list_display = (
+        'id',
+        'today',
+        'yesterday',
+        'created_at',
+    )
