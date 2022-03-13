@@ -4,7 +4,7 @@ from django.dispatch import receiver
 
 from allauth.socialaccount.models import SocialAccount
 
-from accounts.models import User
+from accounts.models import User, UserProvider
 
 
 @receiver(post_save, sender=SocialAccount)
@@ -14,19 +14,32 @@ def receiver_social_signup(sender, instance, created, *args, **kwargs):
         user = User.objects.get(id=instance.user.id)
 
         with transaction.atomic():
+            provider = None
+
+            try:
+                provider = UserProvider.objects.get(
+                    name=social_info.provider,
+                )
+            except UserProvider.DoesNotExist:
+                pass
+
             if social_info.provider == 'naver':
+                user.provider = provider
                 user.username = social_info.extra_data['name'] + str(social_info.extra_data['id'])[:5]
                 user.nickname = social_info.extra_data['name'] + str(social_info.extra_data['id'])[:5]
                 user.save()
             elif social_info.provider == 'google':
+                user.provider = provider
                 user.username = social_info.extra_data['name'] + str(social_info.extra_data['id'])[:5]
                 user.nickname = social_info.extra_data['name'] + str(social_info.extra_data['id'])[:5]
                 user.save()
             elif social_info.provider == 'kakao':
+                user.provider = provider
                 user.username = social_info.extra_data['properties']['nickname'] + str(social_info.extra_data['id'])[:5]
                 user.nickname = social_info.extra_data['properties']['nickname'] + str(social_info.extra_data['id'])[:5]
                 user.save()
             elif social_info.provider == 'github':
+                user.provider = provider
                 user.username = social_info.extra_data['login'] + str(social_info.extra_data['id'])[:5]
                 user.nickname = social_info.extra_data['login'] + str(social_info.extra_data['id'])[:5]
                 user.save()
