@@ -21,6 +21,7 @@ class UserProvider(models.Model):
 
 class User(AbstractUser):
     nickname = models.CharField(max_length=30)
+    provider = models.ForeignKey(UserProvider, on_delete=models.SET_NULL, null=True, blank=True)
     user_img = models.ImageField(upload_to='user_img/', null=True, blank=True)
 
     class Meta:
