@@ -7,6 +7,18 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
+class UserProvider(models.Model):
+    name = models.CharField(max_length=30)
+    description = models.CharField(max_length=255)
+
+    class Meta:
+        verbose_name = "가입유형"
+        verbose_name_plural = "가입유형"
+
+    def __str__(self):
+        return '%s' % self.name
+
+
 class User(AbstractUser):
     nickname = models.CharField(max_length=30)
     user_img = models.ImageField(upload_to='user_img/', null=True, blank=True)

@@ -27,3 +27,14 @@ class UserAdmin(admin.ModelAdmin):
         'is_active',
         'last_login',
     )
+
+
+@admin.register(UserProvider)
+class UserProviderAdmin(admin.ModelAdmin):
+    list_display = (
+        'id',
+        'name',
+    )
+    list_editable = (
+        'name',
+    )
