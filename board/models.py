@@ -42,6 +42,7 @@ class Board(TimeStampedModel):
     url = models.SlugField(unique=True, db_index=True)
     name = models.CharField(max_length=30, unique=True, db_index=True)
     info = models.TextField(null=True, blank=True)
+    text_color = models.CharField(max_length=32, null=True, blank=True)
     board_img = models.ImageField(upload_to='board_img/', null=True, blank=True)
     board_group = models.ForeignKey(BoardGroup, on_delete=models.SET_NULL, null=True, blank=True)
     attribute = models.IntegerField(default=0, db_index=True)
