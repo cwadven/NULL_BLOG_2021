@@ -295,8 +295,24 @@
                                     <img class="img-thumbnail align-middle" style="max-width:70px;max-height: 70px;"
                                          src="{{ reply.author.user_img.url }}" alt="{{ reply.author.nickname }}">
                                 {% else %}
-                                    <img class="img-thumbnail align-middle" style="max-width:70px;max-height: 70px;"
+                                    {% if reply.author.provider %}
+                                        {% if reply.author.provider.name == 'naver' %}
+                                        <img class="img-thumbnail align-middle" style="max-width:70px;max-height: 70px;"
+                                             src="{% static 'naver_icon.png' %}" alt="{{ reply.author.nickname }}">
+                                        {% elif reply.author.provider.name == 'google' %}
+                                        <img class="img-thumbnail align-middle" style="max-width:70px;max-height: 70px;"
+                                         src="{% static 'google_icon.png' %}" alt="{{ reply.author.nickname }}">
+                                        {% elif reply.author.provider.name == 'kakao' %}
+                                        <img class="img-thumbnail align-middle" style="max-width:70px;max-height: 70px;"
+                                         src="{% static 'kakao_icon.png' %}" alt="{{ reply.author.nickname }}">
+                                        {% elif reply.author.provider.name == 'github' %}
+                                        <img class="img-thumbnail align-middle" style="max-width:70px;max-height: 70px;"
+                                         src="{% static 'github_icon.png' %}" alt="{{ reply.author.nickname }}">
+                                        {% endif %}
+                                    {% else %}
+                                        <img class="img-thumbnail align-middle" style="max-width:70px;max-height: 70px;"
                                          src="{% static 'logo.ico' %}" alt="{{ reply.author.nickname }}">
+                                    {% endif %}
                                 {% endif %}
                                 <div>{{ reply.author.nickname }}</div>
                             </div>
