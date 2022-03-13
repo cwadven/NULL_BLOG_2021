@@ -29,7 +29,7 @@
 <!-- 게시판 소개 및 이미지 -->
 {% if board %}
     {% if board.board_img %}
-    <div class="p-4 p-md-5 mb-3 text-white rounded" style="background-image:url({{board.board_img.url}});background-size:cover;background-position:center center;">
+    <div class="p-4 p-md-5 mb-3 rounded" style="background-image:url({{board.board_img.url}});background-size:cover;background-position:center center;color:{% if board.text_color %}{{ board.text_color }}{% else %}white{% endif %}">
     {% else %}
         <div class="p-4 p-md-5 mb-3 rounded">
     {% endif %}
