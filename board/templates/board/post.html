@@ -340,11 +340,26 @@
                                 <div class="align-self-center text-center">
                                     {% if rereply.author.user_img %}
                                         <img class="img-thumbnail align-middle" style="max-width:70px;max-height: 70px;"
-                                             src="{{ rereply.author.user_img.url }}"
-                                             alt="{{ rereply.author.nickname }}">
+                                             src="{{ rereply.author.user_img.url }}" alt="{{ rereply.author.nickname }}">
                                     {% else %}
-                                        <img class="img-thumbnail align-middle" style="max-width:70px;max-height: 70px;"
+                                        {% if rereply.author.provider %}
+                                            {% if rereply.author.provider.name == 'naver' %}
+                                            <img class="img-thumbnail align-middle" style="max-width:70px;max-height: 70px;"
+                                                 src="{% static 'naver_icon.png' %}" alt="{{ rereply.author.nickname }}">
+                                            {% elif rereply.author.provider.name == 'google' %}
+                                            <img class="img-thumbnail align-middle" style="max-width:70px;max-height: 70px;"
+                                             src="{% static 'google_icon.png' %}" alt="{{ rereply.author.nickname }}">
+                                            {% elif rereply.author.provider.name == 'kakao' %}
+                                            <img class="img-thumbnail align-middle" style="max-width:70px;max-height: 70px;"
+                                             src="{% static 'kakao_icon.png' %}" alt="{{ rereply.author.nickname }}">
+                                            {% elif rereply.author.provider.name == 'github' %}
+                                            <img class="img-thumbnail align-middle" style="max-width:70px;max-height: 70px;"
+                                             src="{% static 'github_icon.png' %}" alt="{{ rereply.author.nickname }}">
+                                            {% endif %}
+                                        {% else %}
+                                            <img class="img-thumbnail align-middle" style="max-width:70px;max-height: 70px;"
                                              src="{% static 'logo.ico' %}" alt="{{ rereply.author.nickname }}">
+                                        {% endif %}
                                     {% endif %}
                                     <div>{{ rereply.author.nickname }}</div>
                                 </div>
