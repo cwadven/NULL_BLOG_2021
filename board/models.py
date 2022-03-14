@@ -113,7 +113,7 @@ class Like(TimeStampedModel):
         verbose_name_plural = "게시글 좋아요"
 
     def __str__(self):
-        return self.id
+        return f"{self.id}"
 
 
 # 댓글
