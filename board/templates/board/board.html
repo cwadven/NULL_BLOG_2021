@@ -3,6 +3,19 @@
 
 {% block style %}
 <style>
+.board-name {
+    display: inline-block;
+    {% if board.name_background_color %}background: {{ board.name_background_color }}{% endif %};
+    padding: 10px;
+    border-radius: 10px;
+    {% if board.name_text_color %}color: {{ board.name_text_color }}{% endif %}
+}
+.board-info {
+    {% if board.info_background_color %}background: {{ board.info_background_color }}{% endif %};
+    padding: 10px;
+    border-radius: 10px;
+    {% if board.info_text_color %}color: {{ board.info_text_color }}{% endif %}
+}
 .card_img{
     background-repeat:no-repeat;
     background-position-y:center;
@@ -29,7 +42,7 @@
 <!-- 게시판 소개 및 이미지 -->
 {% if board %}
     {% if board.board_img %}
-    <div class="p-4 p-md-5 mb-3 rounded" style="background-image:url({{board.board_img.url}});background-size:cover;background-position:center center;color:{% if board.text_color %}{{ board.text_color }}{% else %}white{% endif %}">
+    <div class="p-4 p-md-5 mb-3 rounded" style="background-image:url({{board.board_img.url}});background-size:cover;background-position:center center;">
     {% else %}
         <div class="p-4 p-md-5 mb-3 rounded">
     {% endif %}
@@ -37,8 +50,8 @@
     <div class="p-4 p-md-5 mb-3 rounded">
 {% endif %}
     <div class="col-md-8 px-0">
-        <h3 class="display-4">{{board.name}}</h3>
-        <p class="lead my-3">{{board.info}}</p>
+        <h3 class="display-4 board-name">{{board.name}}</h3>
+        <p class="lead my-3 board-info">{{board.info}}</p>
     </div>
     {% if tag_board %}
     <div class="col-md-8 px-0">

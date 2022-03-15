@@ -25,7 +25,7 @@ class BoardAdmin(admin.ModelAdmin):
         'url',
         'name',
         'info',
-        'text_color',
+        'info_text_color',
         'attribute',
         'board_group_name',
     )
