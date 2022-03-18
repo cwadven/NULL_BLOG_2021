@@ -23,6 +23,8 @@ def reply_post(sender, instance, *args, **kwargs):
                 notification_controller=notification_controller,
                 reply=instance,
             )
+            instance.post.author.has_notification = True
+            instance.post.author.save(update_fields=["has_notification"])
 
 
 @receiver(post_save, sender=Rereply)
@@ -39,6 +41,8 @@ def rereply_post(sender, instance, *args, **kwargs):
                 notification_controller=notification_controller,
                 rereply=instance,
             )
+            instance.reply.author.has_notification = True
+            instance.reply.author.save(update_fields=["has_notification"])
 
 
 @receiver(post_save, sender=Like)
@@ -55,3 +59,6 @@ def like_post(sender, instance, *args, **kwargs):
                 notification_controller=notification_controller,
                 like=instance,
             )
+            instance.post.author.has_notification = True
+            instance.post.author.save(update_fields=["has_notification"])
+
