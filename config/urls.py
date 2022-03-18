@@ -19,8 +19,8 @@ urlpatterns = [
     path('sitemap.xml', sitemap, {'sitemaps': {'board': GenericSitemap(info_dict, priority=0.6)}}, name='django.contrib.sitemaps.views.sitemap'),
     path('robots.txt', lambda x: HttpResponse("User-Agent: *\nDisallow: /admin/\nDisallow: /account/\nAllow: /", content_type="text/plain")),
     path('ads.txt', lambda x: HttpResponse("google.com, pub-1987584597836949, DIRECT, f08c47fec0942fa0", content_type="text/plain")),
+    path('notification', include('notification.urls')),
     path('', include('board.urls')),
-    path('', include('notification.urls')),
 
     # 일반 로그인
     path('accounts/', include('accounts.urls')),
