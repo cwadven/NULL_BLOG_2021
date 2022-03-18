@@ -11,44 +11,47 @@ from notification.models import (
 
 @receiver(post_save, sender=Reply)
 def reply_post(sender, instance, *args, **kwargs):
-    with transaction.atomic():
-        notification_controller = NotificationController.objects.create(
-            notification_type_id=1,
-            sender=instance.author,
-            receiver=instance.post.author,
-            representative_message=f"댓글을 작성했습니다.",
-        )
-        ReplyNotification.objects.create(
-            notification_controller=notification_controller,
-            reply=instance,
-        )
+    if instance.author_id != instance.post.author_id:
+        with transaction.atomic():
+            notification_controller = NotificationController.objects.create(
+                notification_type_id=1,
+                sender=instance.author,
+                receiver=instance.post.author,
+                representative_message=f"댓글을 작성했습니다.",
+            )
+            ReplyNotification.objects.create(
+                notification_controller=notification_controller,
+                reply=instance,
+            )
 
 
 @receiver(post_save, sender=Rereply)
 def rereply_post(sender, instance, *args, **kwargs):
-    with transaction.atomic():
-        notification_controller = NotificationController.objects.create(
-            notification_type_id=2,
-            sender=instance.author,
-            receiver=instance.reply.author,
-            representative_message=f"대댓글을 작성했습니다.",
-        )
-        RereplyNotification.objects.create(
-            notification_controller=notification_controller,
-            rereply=instance,
-        )
+    if instance.author_id != instance.reply.author_id:
+        with transaction.atomic():
+            notification_controller = NotificationController.objects.create(
+                notification_type_id=2,
+                sender=instance.author,
+                receiver=instance.reply.author,
+                representative_message=f"대댓글을 작성했습니다.",
+            )
+            RereplyNotification.objects.create(
+                notification_controller=notification_controller,
+                rereply=instance,
+            )
 
 
 @receiver(post_save, sender=Like)
 def like_post(sender, instance, *args, **kwargs):
-    with transaction.atomic():
-        notification_controller = NotificationController.objects.create(
-            notification_type_id=3,
-            sender=instance.author,
-            receiver=instance.post.author,
-            representative_message=f"좋아요를 했습니다.",
-        )
-        LikeNotification.objects.create(
-            notification_controller=notification_controller,
-            like=instance,
-        )
+    if instance.author_id != instance.post.author_id:
+        with transaction.atomic():
+            notification_controller = NotificationController.objects.create(
+                notification_type_id=3,
+                sender=instance.author,
+                receiver=instance.post.author,
+                representative_message=f"좋아요를 했습니다.",
+            )
+            LikeNotification.objects.create(
+                notification_controller=notification_controller,
+                like=instance,
+            )
