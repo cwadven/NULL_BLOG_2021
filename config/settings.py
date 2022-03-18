@@ -47,6 +47,7 @@ PROJECT_APPS = [
     'accounts.apps.AccountsConfig',
     'board',
     'control',
+    'notification',
 ]
 
 PROJECT_SETTING_APPS = [
@@ -264,3 +265,5 @@ LOGGING = {
         },
     }
 }
+
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
