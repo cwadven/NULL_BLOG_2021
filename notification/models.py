@@ -53,16 +53,13 @@ class ReplyNotification(models.Model):
         return title, content, sender
 
     def get_ajax_notification_response(self):
-        return {}
-        # return {
-        #     "id": self.id,
-        #     "alert_type": self.alert_controller.alert_type.name,
-        #     "alert_user_type": "유저",
-        #     "title": "<span>[ 의견 응답 ]</span>",
-        #     "body": self.comment.body,
-        #     "sender": self.alert_controller.sender.nickname,
-        #     "response": "",
-        # }
+        return {
+            "id": self.id,
+            "notification_type": self.notification_controller.notification_type.name,
+            "title": "<span>[ 댓글 ]</span>",
+            "body": self.reply.body,
+            "sender": self.notification_controller.sender.nickname,
+        }
 
 
 class RereplyNotification(models.Model):
@@ -85,16 +82,13 @@ class RereplyNotification(models.Model):
         return title, content, sender
 
     def get_ajax_notification_response(self):
-        return {}
-        # return {
-        #     "id": self.id,
-        #     "alert_type": self.alert_controller.alert_type.name,
-        #     "alert_user_type": "유저",
-        #     "title": "<span>[ 의견 응답 ]</span>",
-        #     "body": self.comment.body,
-        #     "sender": self.alert_controller.sender.nickname,
-        #     "response": "",
-        # }
+        return {
+            "id": self.id,
+            "notification_type": self.notification_controller.notification_type.name,
+            "title": "<span>[ 답글 ]</span>",
+            "body": self.rereply.body,
+            "sender": self.notification_controller.sender.nickname,
+        }
 
 
 class LikeNotification(models.Model):
@@ -117,4 +111,10 @@ class LikeNotification(models.Model):
         return title, content, sender
 
     def get_ajax_notification_response(self):
-        return {}
+        return {
+            "id": self.id,
+            "notification_type": self.notification_controller.notification_type.name,
+            "title": "<span>[ 좋아요 ]</span>",
+            "body": "게시글을 좋아해요!",
+            "sender": self.notification_controller.sender.nickname,
+        }
