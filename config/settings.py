@@ -45,9 +45,9 @@ THIRD_APPS = [
 
 PROJECT_APPS = [
     'accounts.apps.AccountsConfig',
+    'notification.apps.NotificationConfig',
     'board',
     'control',
-    'notification',
 ]
 
 PROJECT_SETTING_APPS = [
