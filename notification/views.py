@@ -21,8 +21,8 @@ def get_notification(request):
             is_checked=False,
         ).order_by('-id')
 
-    for notification in notification_set:
-        one_to_one_table = getattr(notification, notification.notification_type.name)
-        notification_infos.append(one_to_one_table.get_ajax_notification_response())
+        for notification in notification_set:
+            one_to_one_table = getattr(notification, notification.notification_type.name)
+            notification_infos.append(one_to_one_table.get_ajax_notification_response())
 
     return HttpResponse(json.dumps({'notification_infos': notification_infos}), 'application/json')
