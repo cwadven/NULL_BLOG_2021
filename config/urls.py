@@ -20,6 +20,7 @@ urlpatterns = [
     path('robots.txt', lambda x: HttpResponse("User-Agent: *\nDisallow: /admin/\nDisallow: /account/\nAllow: /", content_type="text/plain")),
     path('ads.txt', lambda x: HttpResponse("google.com, pub-1987584597836949, DIRECT, f08c47fec0942fa0", content_type="text/plain")),
     path('', include('board.urls')),
+    path('', include('notification.urls')),
 
     # 일반 로그인
     path('accounts/', include('accounts.urls')),
