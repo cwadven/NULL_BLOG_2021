@@ -7,6 +7,7 @@ from board.models import Reply, Rereply, Like
 class NotificationType(models.Model):
     name = models.CharField(max_length=32)
     description = models.CharField(max_length=128)
+    redirect_url = models.CharField(max_length=256, null=True, blank=True)
 
     class Meta:
         verbose_name = "알림 타입"
