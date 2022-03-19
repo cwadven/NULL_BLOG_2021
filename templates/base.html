@@ -43,6 +43,7 @@
         gtag('config', 'G-BVB1G38F8L');
     </script>
     <script type="text/javascript" src="{% static 'notification.js' %}"></script>
+    <script type="text/javascript" src="{% static 'base.js' %}"></script>
     <script>
         {% if user.is_authenticated %}
         $(document).ready(function () {
@@ -110,6 +111,60 @@
     {% endblock %}
 
     <style>
+        nav {
+            display: flex;
+            overflow-x: scroll;
+        }
+
+        nav::-webkit-scrollbar{
+            height: 5px;
+        }
+
+        nav::-webkit-scrollbar-thumb{
+            background-color: rgb(2, 10, 10);
+            border-radius: 10px;
+        }
+
+        nav::-webkit-scrollbar-track{
+            background-color: rgba(1, 6, 6, 0.33);
+            border-radius: 10px;
+        }
+
+        .nav-link {
+            color: black;
+        }
+
+        .nav-link:hover {
+            color: rgba(0, 0, 0, 0.22);
+        }
+
+        .board-group {
+            cursor: pointer;
+        }
+
+        .board-group:hover {
+            color: rgba(0, 0, 0, 0.22);
+        }
+
+        #from_board_group {
+            display: none;
+            overflow-x: scroll;
+        }
+
+        #from_board_group::-webkit-scrollbar{
+            height: 5px;
+        }
+
+        #from_board_group::-webkit-scrollbar-thumb{
+            background-color: rgb(2, 10, 10);
+            border-radius: 10px;
+        }
+
+        #from_board_group::-webkit-scrollbar-track{
+            background-color: rgba(1, 6, 6, 0.33);
+            border-radius: 10px;
+        }
+
         #logo:hover {
             cursor: pointer;
         }
@@ -168,37 +223,27 @@
             {% endif %}
         </div>
     </div>
-    <nav class="navbar navbar-expand-lg navbar-light">
-        <div class="container-fluid">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
-                    aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                <ul class="navbar-nav">
-                    {% for board in nav_board %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'board:board' board.url %}">{{ board.name }}</a>
-                        </li>
-                    {% endfor %}
-                    {% for group in nav_group %}
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
-                               data-bs-toggle="dropdown" aria-expanded="false">
-                                {{ group.group_name }}
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                {% for boards in group.board_set.all %}
-                                    <li><a class="dropdown-item"
-                                           href="{% url 'board:board' boards.url %}">{{ boards.name }}</a></li>
-                                {% endfor %}
-                            </ul>
-                        </li>
-                    {% endfor %}
-                </ul>
+    <nav class="mb-2">
+        {% for board in nav_board %}
+            <div class="nav-item">
+                <a style="word-break: keep-all;" class="nav-link" href="{% url 'board:board' board.url %}">{{ board.name }}</a>
             </div>
-        </div>
+        {% endfor %}
+        {% for group in nav_group %}
+            <div class="nav-item board-group">
+                <div class="nav-link" onclick="get_board_set_from_board_group({{ group.id }})">
+                    {{ group.group_name }}▼
+                </div>
+{#                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">#}
+{#                    {% for boards in group.board_set.all %}#}
+{#                        <li><a class="dropdown-item"#}
+{#                               href="{% url 'board:board' boards.url %}">{{ boards.name }}</a></li>#}
+{#                    {% endfor %}#}
+{#                </ul>#}
+            </div>
+        {% endfor %}
     </nav>
+    <div class="mb-2" id="from_board_group"></div>
     <div class="row">
         <div class="col-12 mb-3">{% block top %}{% endblock %}</div>
         <div class="col-sm-12 col-md-7 col-lg-8 col-xl-8 col-xxl-9">{% block middle_left %}{% endblock %}</div>

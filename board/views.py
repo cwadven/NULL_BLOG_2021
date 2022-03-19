@@ -1,11 +1,26 @@
+import json
+
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404, HttpResponse
 
 from common_library import web_paging
 from .models import *
 from control.models import *
 from django.db.models import Count, Q
+
+
+def get_board_set_from_board_group(request, board_group_id):
+    try:
+        board_group = BoardGroup.objects.get(
+            id=board_group_id
+        )
+    except BoardGroup.DoesNotExist:
+        raise Http404
+
+    board_set = board_group.board_set.all().values('name', 'url')
+
+    return HttpResponse(json.dumps({'board_set': list(board_set)}), 'application/json')
 
 
 def home(request):
