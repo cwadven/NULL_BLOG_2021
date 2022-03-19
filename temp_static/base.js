@@ -8,9 +8,7 @@ function get_board_set_from_board_group(board_group_id) {
 
             data['board_set'].forEach(function (data){
                 $('#from_board_group').append(
-                    `<div class="nav-item">
-                        <a style="word-break: keep-all;" class="nav-link" href="/${data.url}">${data.name}</a>
-                    </div>`
+                    `<a style="word-break: keep-all;" class="nav-link" href="/${data.url}">${data.name}</a>`
                 );
             });
         }

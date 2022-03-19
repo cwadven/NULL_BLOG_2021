@@ -141,6 +141,7 @@
 
         .board-group {
             cursor: pointer;
+            white-space: nowrap;
         }
 
         .board-group:hover {
@@ -229,15 +230,7 @@
             <a style="word-break: keep-all;" class="nav-link" href="{% url 'board:board' board.url %}">{{ board.name }}</a>
         {% endfor %}
         {% for group in nav_group %}
-            <div class="nav-item board-group" onclick="get_board_set_from_board_group({{ group.id }})">
-                    {{ group.group_name }}▼
-{#                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">#}
-{#                    {% for boards in group.board_set.all %}#}
-{#                        <li><a class="dropdown-item"#}
-{#                               href="{% url 'board:board' boards.url %}">{{ boards.name }}</a></li>#}
-{#                    {% endfor %}#}
-{#                </ul>#}
-            </div>
+            <div class="nav-link board-group" onclick="get_board_set_from_board_group({{ group.id }})">{{ group.group_name }}▼</div>
         {% endfor %}
     </nav>
     <div class="mb-2" id="from_board_group"></div>
