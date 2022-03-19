@@ -64,10 +64,10 @@ def check_notification(request, notification_id):
 
         # 위치 가져오기
         post_id = lookup_model.post.id
-        board_name = lookup_model.post.board.name
+        board_url = lookup_model.post.board.url
 
         # 최종 url 주소
-        final_url = f"/{board_name}/{post_id}"
+        final_url = f"/{board_url}/{post_id}"
 
         # 만약 reply 면, 해당하는 댓글 # 로 보내기
         # 만약 rereply 면, 해당하는 대댓글 # 로 보내기
