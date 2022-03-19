@@ -116,6 +116,6 @@ class LikeNotification(models.Model):
             "id": self.id,
             "notification_type": self.notification_controller.notification_type.name,
             "title": "<span>[ 좋아요 ]</span>",
-            "body": "게시글을 좋아해요!",
+            "body": f"게시글 {self.like.post.title} 에 좋아요를 했습니다.",
             "sender": self.notification_controller.sender.nickname,
         }
