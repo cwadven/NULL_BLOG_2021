@@ -55,7 +55,7 @@ class ReplyNotification(models.Model):
 
     def get_ajax_notification_response(self):
         return {
-            "id": self.id,
+            "id": self.notification_controller.id,
             "notification_type": self.notification_controller.notification_type.name,
             "title": "<span>[ 댓글 ]</span>",
             "body": self.reply.body,
@@ -84,7 +84,7 @@ class RereplyNotification(models.Model):
 
     def get_ajax_notification_response(self):
         return {
-            "id": self.id,
+            "id": self.notification_controller.id,
             "notification_type": self.notification_controller.notification_type.name,
             "title": "<span>[ 답글 ]</span>",
             "body": self.rereply.body,
@@ -113,9 +113,9 @@ class LikeNotification(models.Model):
 
     def get_ajax_notification_response(self):
         return {
-            "id": self.id,
+            "id": self.notification_controller.id,
             "notification_type": self.notification_controller.notification_type.name,
             "title": "<span>[ 좋아요 ]</span>",
-            "body": f"게시글 {self.like.post.title} 에 좋아요를 했습니다.",
+            "body": f"게시글 '{self.like.post.title[:10] + '...' if len(self.like.post.title) > 10 else self.like.post.title}' 에 좋아요를 했습니다.",
             "sender": self.notification_controller.sender.nickname,
         }
