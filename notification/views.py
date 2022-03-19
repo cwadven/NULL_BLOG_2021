@@ -15,7 +15,7 @@ def get_notification(request):
         notification_set = NotificationController.objects.select_related(
             'replynotification__reply__post',
             'rereplynotification__rereply__post',
-            'likenotification__like',
+            'likenotification__like__post',
             'notification_type',
             'receiver',
             'sender',
