@@ -18,7 +18,7 @@ function get_notification_ajax() {
                         let sender = data['notification_infos'][i]['sender'];
 
                         let svg_img;
-                        let url = '<a href=\'/notification/check/' + id + '\'>' + '보러가기</a>';
+                        let url = '<a href=\'/notification/check/' + id + '\'>' + '보기</a>';
 
                         if (type === 'replynotification') {
                             svg_img = `<svg width="28" height="35" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
@@ -37,11 +37,10 @@ function get_notification_ajax() {
                             `<div class="mb-1 py-1 " style="display: flex; align-items: center;border-radius:7px;background-color: #F1F1F1; margin: 1px 1px;">
                                 <div class="mx-2 position-relative" style="display:flex; align-items: center; justify-content: center;height:65px; width:65px;border:1px solid rgba(0, 0, 0, 0.2); border-radius:50%;background-color: #FFFFFF; flex-shrink:0;">
                                     ${svg_img}
-                                    <div class="position-absolute top-100 start-100 translate-middle" style="height: 40px;width:45px;background-color: rgba(0, 0, 0, 0.1);transform: scale(1.1, 0.1);transform-origin: bottom;border-radius: 50%;margin: auto;bottom: -8px;filter: blur(3px);"></div>
                                 </div>
                                 <div style="font-size: 16px; width:100%;">
                                     <div style="font-weight: bold;">${title}</div>
-                                    <div class="mr-2">${body}</div>
+                                    <div class="mr-2" style="font-size: smaller;">${body}</div>
                                     <div class='mt-2' style="display: flex; justify-content: space-between; font-size: 14px;">
                                     <div>${url}</div>
                                     <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;width: 160px; text-align: right; margin-right: 9px;">${sender}</div>
