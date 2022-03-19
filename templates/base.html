@@ -111,22 +111,22 @@
     {% endblock %}
 
     <style>
-        nav {
+        .nav-container {
             display: flex;
             overflow-x: scroll;
             align-items: center;
         }
 
-        nav::-webkit-scrollbar{
+        .nav-container::-webkit-scrollbar{
             height: 5px;
         }
 
-        nav::-webkit-scrollbar-thumb{
+        .nav-container::-webkit-scrollbar-thumb{
             background-color: rgb(2, 10, 10);
             border-radius: 10px;
         }
 
-        nav::-webkit-scrollbar-track{
+        .nav-container::-webkit-scrollbar-track{
             background-color: rgba(1, 6, 6, 0.33);
             border-radius: 10px;
         }
@@ -226,14 +226,16 @@
         </div>
     </div>
     <nav class="mb-2">
+        <div class="nav-container">
         {% for board in nav_board %}
-            <a style="word-break: keep-all;" class="nav-link" href="{% url 'board:board' board.url %}">{{ board.name }}</a>
+            <a style="white-space: nowrap;" class="nav-link" href="{% url 'board:board' board.url %}">{{ board.name }}</a>
         {% endfor %}
         {% for group in nav_group %}
             <div class="nav-link board-group" onclick="get_board_set_from_board_group({{ group.id }})">{{ group.group_name }}▼</div>
         {% endfor %}
+        </div>
+        <div class="mb-2" id="from_board_group"></div>
     </nav>
-    <div class="mb-2" id="from_board_group"></div>
     <div class="row">
         <div class="col-12 mb-3">{% block top %}{% endblock %}</div>
         <div class="col-sm-12 col-md-7 col-lg-8 col-xl-8 col-xxl-9">{% block middle_left %}{% endblock %}</div>
