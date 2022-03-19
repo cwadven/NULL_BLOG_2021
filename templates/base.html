@@ -44,12 +44,14 @@
     </script>
     <script type="text/javascript" src="{% static 'notification.js' %}"></script>
     <script>
+        {% if user.is_authenticated %}
         $(document).ready(function () {
             const notice_dropdown = document.getElementById('notice');
             notice_dropdown.addEventListener('show.bs.dropdown', function () {
                 get_notification_ajax();
             });
         });
+        {% endif %}
 
         onLoginRequire = () => {
             $('#login_message').removeClass('alert-danger');
