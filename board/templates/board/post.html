@@ -326,7 +326,7 @@
                         </div>
                     </div>
                     {% for rereply in reply.rereplys.all %}
-                        <div class="row g-0">
+                        <div id="rereply_{{ rereply.id }}" class="row g-0 mt-3">
                             <div class="text-end pe-2">
                                 {% if user.is_authenticated %}
                                     {% if request.user == rereply.author or request.user.is_superuser %}
