@@ -111,6 +111,15 @@
     {% endblock %}
 
     <style>
+        @font-face {
+            font-family: 'NotoSansKR-Regular';
+            src: url("{% static 'fonts/NotoSansKR-Regular.otf' %}");
+        }
+
+        body {
+          font-family: 'NotoSansKR-Regular', sans-serif !important;
+        }
+
         .nav-container {
             display: flex;
             overflow-x: scroll;
