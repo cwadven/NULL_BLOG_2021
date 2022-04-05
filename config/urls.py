@@ -9,7 +9,7 @@ from django.conf import settings
 from board.models import Post
 
 info_dict = {
-    'queryset': Post.objects.filter(),
+    'queryset': Post.objects.active().filter(),
     'date_field': 'created_at',
 }
 
