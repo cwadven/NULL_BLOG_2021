@@ -9,3 +9,6 @@ class PostQuerySet(models.QuerySet):
 class PostManager(models.Manager):
     def get_queryset(self):
         return PostQuerySet(self.model, using=self._db)
+
+    def active(self):
+        return self.filter(is_active=True)
