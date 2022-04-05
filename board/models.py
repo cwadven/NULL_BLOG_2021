@@ -4,7 +4,7 @@ from ckeditor_uploader.fields import RichTextUploadingField
 import re
 from django.urls import reverse
 
-from board.managers import BoardManager
+from board.managers import PostManager
 
 
 class TimeStampedModel(models.Model):
@@ -51,9 +51,6 @@ class Board(TimeStampedModel):
     board_img = models.ImageField(upload_to='board_img/', null=True, blank=True)
     board_group = models.ForeignKey(BoardGroup, on_delete=models.SET_NULL, null=True, blank=True)
     attribute = models.IntegerField(default=0, db_index=True)
-    is_active = models.BooleanField(default=True)
-
-    objects = BoardManager()
 
     class Meta:
         verbose_name = "게시판"
@@ -72,6 +69,9 @@ class Post(TimeStampedModel):
     board = models.ForeignKey(Board, on_delete=models.CASCADE)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='posts', on_delete=models.CASCADE)
     tag_set = models.ManyToManyField('Tag', blank=True)
+    is_active = models.BooleanField(default=True)
+
+    objects = PostManager()
 
     class Meta:
         verbose_name = "게시글"
