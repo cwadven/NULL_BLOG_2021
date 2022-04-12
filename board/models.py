@@ -93,7 +93,6 @@ class Post(TimeStampedModel):
 
     def short_body(self):
         splited_body_list = list(map(transition_special_code, self.body.split()[:50]))
-        print(splited_body_list)
 
         return " ".join(splited_body_list)
 
