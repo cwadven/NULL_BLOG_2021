@@ -92,9 +92,21 @@ class Post(TimeStampedModel):
             self.tag_set.add(tag)
 
     def short_body(self):
-        splited_body_list = list(map(transition_special_code, self.body.split()[:50]))
+        SPECIAL_CHAR = {
+            "&gt;": ">",
+            "&nbsp;": " ",
+            "&lt;": "<",
+            "&amp;": "&",
+            "&quot;": '"',
+            "&minus;": "-",
+        }
+        split_body_list = self.body.split()[:50]
+        result_string = " ".join(split_body_list)
 
-        return " ".join(splited_body_list)
+        for key, val in SPECIAL_CHAR.items():
+            result_string = result_string.replace(key, val)
+
+        return result_string
 
     # sitemap 생성하기 위해서 reverse 사용하여 해당 매개변수를 넣기
     def get_absolute_url(self):
