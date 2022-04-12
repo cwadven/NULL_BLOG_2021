@@ -24,11 +24,11 @@ def get_board_set_from_board_group(request, board_group_id):
 
 
 def home(request):
-    recent_post_set = Post.objects.order_by(
+    recent_post_set = Post.objects.active().order_by(
         '-id'
     )[:6]
 
-    liked_ordered_post_set = Post.objects.annotate(
+    liked_ordered_post_set = Post.objects.active().annotate(
         reply_count=Count('replys', distinct=True) + Count('rereply', distinct=True),
         like_count=Count('likes', distinct=True),
     ).order_by(
@@ -106,7 +106,7 @@ def board(request, board_url):
         )
     # 전체 검색
     elif page == 3:
-        posts = Post.objects.filter(q).annotate(
+        posts = Post.objects.active().filter(q).annotate(
             reply_count=Count('replys', distinct=True) + Count('rereply', distinct=True),
             like_count=Count('likes', distinct=True),
         ).order_by(
@@ -127,7 +127,7 @@ def board(request, board_url):
 
 # 자세한 글 보기
 def post_detail(request, board_url, pk):
-    qs = Post.objects.filter(
+    qs = Post.objects.active().filter(
         board__url=board_url
     ).select_related(
         'board'

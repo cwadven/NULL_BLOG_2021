@@ -4,6 +4,8 @@ from ckeditor_uploader.fields import RichTextUploadingField
 import re
 from django.urls import reverse
 
+from board.managers import PostManager
+
 
 class TimeStampedModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
@@ -67,6 +69,9 @@ class Post(TimeStampedModel):
     board = models.ForeignKey(Board, on_delete=models.CASCADE)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='posts', on_delete=models.CASCADE)
     tag_set = models.ManyToManyField('Tag', blank=True)
+    is_active = models.BooleanField(default=True)
+
+    objects = PostManager()
 
     class Meta:
         verbose_name = "게시글"
