@@ -1,4 +1,5 @@
 import datetime
+import re
 
 from django.core.paginator import Paginator
 
@@ -46,3 +47,16 @@ def web_paging(request, queryset, post_size=10, page_num_size=5):
         "page_posts": page_posts,
         "page_range": page_range,
     }
+
+
+def transition_special_code(special_code: str) -> str:
+    SPECIAL_CHAR = {
+        "&gt;": ">",
+        "&nbsp;": " ",
+        "&lt;": "<",
+        "&amp;": "&",
+        "&quot;": '"',
+        "&minus;": "-",
+    }
+    special_code = re.sub('<[^<]+?>', '', special_code)
+    return SPECIAL_CHAR.get(special_code, special_code)

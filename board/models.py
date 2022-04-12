@@ -5,6 +5,7 @@ import re
 from django.urls import reverse
 
 from board.managers import PostManager
+from common_library import transition_special_code
 
 
 class TimeStampedModel(models.Model):
@@ -91,10 +92,10 @@ class Post(TimeStampedModel):
             self.tag_set.add(tag)
 
     def short_body(self):
-        if len(self.body) > 200:
-            return self.body[:200]
-        else:
-            return self.body
+        splited_body_list = list(map(transition_special_code, self.body.split()[:50]))
+        print(splited_body_list)
+
+        return " ".join(splited_body_list)
 
     # sitemap 생성하기 위해서 reverse 사용하여 해당 매개변수를 넣기
     def get_absolute_url(self):
