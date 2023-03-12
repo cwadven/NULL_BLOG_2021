@@ -31,6 +31,9 @@ def get_notification(request):
             except Exception as e:
                 pass
 
+        request.user.has_notifications = False
+        request.user.save(update_fields=["has_notifications"])
+
     return HttpResponse(json.dumps({'notification_infos': notification_infos}), 'application/json')
 
 
@@ -55,10 +58,6 @@ def check_notification(request, notification_id):
             with transaction.atomic():
                 notification_controller.is_checked = True
                 notification_controller.save(update_fields=["is_checked"])
-
-                if request.user.receiver_profile.filter(is_checked=False).count() == 0:
-                    request.user.has_notifications = False
-                    request.user.save(update_fields=["has_notifications"])
 
         one_to_one_table = getattr(notification_controller, notification_controller.notification_type.name)
 
