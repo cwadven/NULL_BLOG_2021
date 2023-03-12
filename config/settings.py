@@ -190,6 +190,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 CRONJOBS = [
     ('0 15 * * *', 'config.cron.update_yesterday_and_today_visitor', '>> /var/www/null_blog/visitor_update.log'),
+    ('0 0 * * *', 'config.cron.database_backup', '>> /var/www/null_blog/database_backup.log'),
 ]
 
 LANGUAGE_CODE = 'en-us'

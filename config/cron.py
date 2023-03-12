@@ -1,4 +1,9 @@
+import os
+import pymysql
 import datetime
+
+from django.conf import settings
+
 from control.models import TodayYesterday, IPVisitant
 
 
@@ -30,3 +35,28 @@ def update_yesterday_and_today_visitor():
             yesterday=0,
             today=1,
         )
+
+
+def database_backup():
+    """
+    데이터 베이스 백업
+    """
+    HOST = settings.DATABASES['default']['HOST']
+    NAME = settings.DATABASES['default']['NAME']
+    USER = settings.DATABASES['default']['USER']
+    PASSWORD = settings.DATABASES['default']['PASSWORD']
+
+    conn = pymysql.connect(
+        host='database_host',
+        user='database_user',
+        password='database_password',
+        database='database_name',
+        charset='utf8'
+    )
+
+    backup_path = '/var/www/backup'
+    backup_file_name = f'nully_blog_{datetime.date.today().strftime("%Y-%m-%d")}.sql'
+    os.system(
+        f'mysqldump -h {HOST} -u {USER} -p{PASSWORD} {NAME} > {backup_path}/{backup_file_name}')
+
+    conn.close()
