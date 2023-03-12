@@ -17,13 +17,13 @@ jobs:
       run: |
         . /var/www/null_blog/venv/bin/activate && pip install -r /var/www/null_blog/requirements.txt
 
-    - name: Collectstatic
-      run: |
-        . /var/www/null_blog/venv/bin/activate && python /var/www/null_blog/manage.py collectstatic --noinput
-
     - name: Database Update
       run: |
         . /var/www/null_blog/venv/bin/activate && python /var/www/null_blog/manage.py migrate --noinput
+
+    - name: Collectstatic
+      run: |
+        . /var/www/null_blog/venv/bin/activate && python /var/www/null_blog/manage.py collectstatic --noinput
 
     - name: Cron Add
       run: |
