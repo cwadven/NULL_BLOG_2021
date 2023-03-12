@@ -30,6 +30,11 @@ jobs:
         . /var/www/null_blog/venv/bin/activate && python /var/www/null_blog/manage.py crontab add
       continue-on-error: true
 
+    - name: celery restart
+      run: |
+        sudo /etc/init.d/celeryd restart
+      continue-on-error: true
+
     - name: Restart server
       run: |
         sudo systemctl restart nginx
