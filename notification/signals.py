@@ -3,10 +3,12 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from board.models import Reply, Rereply, Like
+from common_conts import REPLY_NOTIFICATION, EMAIL_TEMPLATE_MAPPER, REREPLY_NOTIFICATION, LIKE_NOTIFICATION
 from notification.models import (
     NotificationController,
     ReplyNotification, RereplyNotification, LikeNotification
 )
+from notification.task import send_email_async_notification
 
 
 @receiver(post_save, sender=Reply)
@@ -25,6 +27,20 @@ def reply_post(sender, instance, *args, **kwargs):
             )
             instance.post.author.has_notifications = True
             instance.post.author.save(update_fields=["has_notifications"])
+        if instance.post.author.email:
+            send_email_async_notification.apply_async(
+                (
+                    f'[Nulls 블로그] {instance.post.title[:20]} 게시글에 댓글이 달렸습니다.',
+                    EMAIL_TEMPLATE_MAPPER[REPLY_NOTIFICATION],
+                    {
+                        'post_title': f'{instance.post.title} 에 댓글이 달렸습니다.',
+                        'post_url': 'https://nulls.co.kr' + instance.post.get_absolute_url() + '#reply_' + str(instance.id),
+                        'reply_nickname': instance.author.nickname,
+                        'reply_body': instance.body,
+                    },
+                    [instance.post.author.email],
+                )
+            )
 
 
 @receiver(post_save, sender=Rereply)
@@ -43,6 +59,20 @@ def rereply_post(sender, instance, *args, **kwargs):
             )
             instance.reply.author.has_notifications = True
             instance.reply.author.save(update_fields=["has_notifications"])
+        if instance.reply.author.email:
+            send_email_async_notification.apply_async(
+                (
+                    f'[Nulls 블로그] 댓글에 대댓글이 달렸습니다.',
+                    EMAIL_TEMPLATE_MAPPER[REREPLY_NOTIFICATION],
+                    {
+                        'information': f'{instance.reply.author.nickname} 님의 댓글에 대댓글이 달렸습니다.',
+                        'post_url': 'https://nulls.co.kr' + instance.post.get_absolute_url() + '#rereply_' + str(instance.id),
+                        'rereply_nickname': instance.author.nickname,
+                        'rereply_body': instance.body,
+                    },
+                    [instance.reply.author.email]
+                )
+            )
 
 
 @receiver(post_save, sender=Like)
@@ -61,4 +91,16 @@ def like_post(sender, instance, *args, **kwargs):
             )
             instance.post.author.has_notifications = True
             instance.post.author.save(update_fields=["has_notifications"])
-
+        if instance.post.author.email:
+            send_email_async_notification.apply_async(
+                (
+                    f'[Nulls 블로그] 게시글에 좋아요가 달렸습니다.',
+                    EMAIL_TEMPLATE_MAPPER[LIKE_NOTIFICATION],
+                    {
+                        'post_title': f'{instance.post.title} 게시글에 좋아요가 달렸습니다.',
+                        'post_url': 'https://nulls.co.kr' + instance.post.get_absolute_url(),
+                        'liker_nickname': instance.author.nickname,
+                    },
+                    [instance.post.author.email]
+                )
+            )

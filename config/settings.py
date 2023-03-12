@@ -2,7 +2,9 @@ from pathlib import Path
 import os
 from .PRIVATE_SETTING import (
     SECRET_KEY,
-    LOCAL_DATABASE
+    LOCAL_DATABASE,
+    EMAIL_HOST_USER,
+    EMAIL_HOST_PASSWORD,
 )
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -41,6 +43,7 @@ THIRD_APPS = [
     'ckeditor',
     'ckeditor_uploader',
     'django_crontab',
+    'django_celery_results',
 ]
 
 PROJECT_APPS = [
@@ -267,3 +270,30 @@ LOGGING = {
 }
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+EMAIL_HOST_USER = EMAIL_HOST_USER
+EMAIL_HOST_PASSWORD = EMAIL_HOST_PASSWORD
+
+# Email settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = '587'
+EMAIL_USE_TLS = True
+
+# CELERY SETTINGS
+timezone = 'Asia/Seoul'
+CELERY_BROKER_URL = 'redis://localhost:6379/1'
+result_backend = 'redis://localhost:6379/1'
+accept_content = ["json"]
+task_serializer = "json"
+result_serializer = "json"
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://localhost:6379/1',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    }
+}
