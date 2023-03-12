@@ -31,3 +31,4 @@ django-crontab==0.7.1
 django-celery-results==2.4.0
 celery==5.2.7
 importlib-metadata==4.13.0
+redis==4.5.1
