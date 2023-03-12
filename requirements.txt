@@ -21,7 +21,7 @@ cryptography==3.4.6
 defusedxml==0.7.1
 Deprecated==1.2.13
 dimagi-utils==1.2.3.2
-Django==3.2.12
+Django==3.1.7
 django-allauth==0.44.0
 django-celery-results==2.4.0
 django-ckeditor==6.0.0
