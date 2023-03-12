@@ -24,6 +24,10 @@ class NotificationTypeAdmin(admin.ModelAdmin):
 class NotificationControllerTypeAdmin(admin.ModelAdmin):
     list_display = (
         'id',
+        'sender',
+        'receiver',
+        'representative_message',
+        'is_checked',
     )
 
 
