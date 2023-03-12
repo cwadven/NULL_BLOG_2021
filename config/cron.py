@@ -47,10 +47,10 @@ def database_backup():
     PASSWORD = settings.DATABASES['default']['PASSWORD']
 
     conn = pymysql.connect(
-        host='database_host',
-        user='database_user',
-        password='database_password',
-        database='database_name',
+        host=HOST,
+        user=USER,
+        password=PASSWORD,
+        database=NAME,
         charset='utf8'
     )
 
