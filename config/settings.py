@@ -5,6 +5,7 @@ from .PRIVATE_SETTING import (
     LOCAL_DATABASE,
     EMAIL_HOST_USER,
     EMAIL_HOST_PASSWORD,
+    CHATGPT_KEY,
 )
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -51,6 +52,7 @@ PROJECT_APPS = [
     'notification.apps.NotificationConfig',
     'board',
     'control',
+    'chatgpt',
 ]
 
 PROJECT_SETTING_APPS = [
@@ -191,6 +193,7 @@ AUTH_PASSWORD_VALIDATORS = [
 CRONJOBS = [
     ('0 15 * * *', 'config.cron.update_yesterday_and_today_visitor', '>> /var/www/null_blog/visitor_update.log'),
     ('0 0 1 * *', 'config.cron.database_backup', '>> /var/www/null_blog/database_backup.log'),
+    ('0 3 * * *', 'config.cron.get_chatgpt_lesson', '>> /var/www/null_blog/get_chatgpt_lesson.log'),
 ]
 
 LANGUAGE_CODE = 'en-us'
@@ -298,3 +301,5 @@ CACHES = {
         }
     }
 }
+
+CHATGPT_KEY = CHATGPT_KEY
