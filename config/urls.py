@@ -21,6 +21,7 @@ urlpatterns = [
     path('ads.txt', lambda x: HttpResponse("google.com, pub-1987584597836949, DIRECT, f08c47fec0942fa0", content_type="text/plain")),
     path('notification', include('notification.urls')),
     path('', include('board.urls')),
+    path('chatgpt', include('chatgpt.urls')),
 
     # 일반 로그인
     path('accounts/', include('accounts.urls')),

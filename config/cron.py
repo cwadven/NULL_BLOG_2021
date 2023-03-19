@@ -4,6 +4,8 @@ import datetime
 
 from django.conf import settings
 
+from chatgpt.models import Lesson
+from chatgpt.services import get_chatgpt_response
 from control.models import TodayYesterday, IPVisitant
 
 
@@ -60,3 +62,23 @@ def database_backup():
         f'mysqldump -h {HOST} -u {USER} -p{PASSWORD} {NAME} > {backup_path}/{backup_file_name}')
 
     conn.close()
+
+
+def get_chatgpt_lesson():
+    """
+    ChatGPT로부터 교훈을 받아온다.
+    """
+    print("----request----")
+    lesson = get_chatgpt_response(Lesson.request_lesson_to_chatgpt())
+    if lesson:
+        summary = get_chatgpt_response(Lesson.request_lesson_summary_by_body(lesson))
+
+        if summary:
+            Lesson.objects.create(
+                body=lesson,
+                summary=summary,
+            )
+            print("----created----")
+    else:
+        print("----failed----")
+    print("-----ended-----")
