@@ -22,6 +22,11 @@
     -webkit-box-orient: vertical;
 }
 
+.truncate-3-with-out-overflow {
+    font-size: 15px;
+    white-space: break-spaces;
+}
+
 .truncate-5 {
     font-size: 15px;
     overflow: hidden;
@@ -38,6 +43,45 @@
 {% block description %}천방지축 NULL이 잡다한 IT 자료를 올리는 블로그{% endblock %}
 {% block current_url %}https://nulls.co.kr{{ request.get_full_path }}{% endblock %}
 {% block img %}https://nulls.co.kr/static/logo.ico{% endblock %}
+
+{% block script %}
+<script>
+    $(document).ready(function(){
+        $('#lesson_detail').on('click', function() {
+            if ($(this).parent().parent().find('p').hasClass('truncate-3')) {
+                $(this).parent().parent().find('p').removeClass('truncate-3');
+                $(this).parent().parent().find('p').addClass('truncate-3-with-out-overflow');
+                $(this).text('접기');
+            } else {
+                $(this).parent().parent().find('p').removeClass('truncate-3-with-out-overflow');
+                $(this).parent().parent().find('p').addClass('truncate-3');
+                $(this).text('자세히보기');
+            }
+        });
+    });
+</script>
+{% endblock %}
+
+{% block lesson %}
+{% if lesson %}
+    <h5 class="rounded-top border border-dark bg-light p-2">오늘의 교훈</h5>
+    <div class="col-12">
+    <div class="card">
+        <div class="row g-0">
+            <div class="col-12">
+                <div class="card-body">
+                    <h5 class="card-title">{{ lesson.summary }}</h5>
+                    <p class="card-text truncate-3">{{ lesson.body }}</p>
+                    <div class="card-text text-center">
+                        <span id="lesson_detail" style="cursor: pointer;">자세히보기</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+{% endif %}
+{% endblock %}
 
 {% block top %}
 <!-- 최근 포스트 -->

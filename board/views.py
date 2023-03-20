@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, Http404, HttpResponse
 
+from chatgpt.models import Lesson
 from common_library import web_paging
 from .models import *
 from control.models import *
@@ -43,11 +44,14 @@ def home(request):
         '-created_at'
     )[:5]
 
+    lesson = Lesson.objects.last()
+
     context = {
         'recent_post_set': recent_post_set,
         'liked_ordered_post_set': liked_ordered_post_set,
         'tag_set': tag_set,
         'announce_set': announce_set,
+        'lesson': lesson,
     }
 
     return render(request, 'board/home.html', context)
