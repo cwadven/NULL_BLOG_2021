@@ -6,6 +6,7 @@ class LessonInformation(models.Model):
     ChatGPT 질문지
     tag 를 작성하면 tag 로 작성한 답변 히스토리를 가지고 지금까지 정보를 기반으로 이야기
     """
+    summary = models.TextField(null=True, blank=True, help_text='요약')
     system_prompt = models.CharField(max_length=45, null=True, blank=True, help_text='시스템 프롬프트')
     prompt = models.TextField(help_text='프롬프트')
     tag = models.CharField(max_length=45, null=True, blank=True, help_text='태그')
