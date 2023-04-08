@@ -22,7 +22,7 @@ def backward(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('account', '0001_initial'),
+        ('chatgpt', '0003_auto_20230408_1544'),
     ]
 
     operations = [
