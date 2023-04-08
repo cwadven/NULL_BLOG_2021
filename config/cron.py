@@ -4,7 +4,9 @@ import datetime
 
 from django.conf import settings
 
-from chatgpt.models import Lesson
+from chatgpt.consts import LessonSummary
+from chatgpt.dtos import ChatGPTConversationEntry
+from chatgpt.models import Lesson, LessonInformation
 from chatgpt.services import get_chatgpt_response
 from control.models import TodayYesterday, IPVisitant
 
@@ -66,19 +68,30 @@ def database_backup():
 
 def get_chatgpt_lesson():
     """
-    ChatGPT로부터 교훈을 받아온다.
+    ChatGPT API를 통해 정보를 가져옵니다
     """
-    print("----request----")
-    lesson = get_chatgpt_response(Lesson.request_lesson_to_chatgpt())
-    if lesson:
-        summary = get_chatgpt_response(Lesson.request_lesson_summary_by_body(lesson))
+    try:
+        lesson_information = LessonInformation.objects.all()[0]
+    except IndexError:
+        print("-----failed to find Lesson Information-----")
+        return
 
-        if summary:
-            Lesson.objects.create(
-                body=lesson,
-                summary=summary,
-            )
-            print("----created----")
-    else:
-        print("----failed----")
+    lesson_histories = [
+        ChatGPTConversationEntry(role='assistant', content=lesson) for lesson in
+        Lesson.objects.filter(
+            tag=lesson_information.tag,
+        ).values_list('body', flat=True)
+    ]
+    print("----request----")
+    result = get_chatgpt_response(
+        system_prompt=lesson_information.system_prompt,
+        prompt=lesson_information.prompt,
+        conversation_history=lesson_histories,
+    )
+    Lesson.objects.create(
+        summary=lesson_information.summary,
+        tag=lesson_information.tag,
+        body=result,
+    )
+    print("----created----")
     print("-----ended-----")
