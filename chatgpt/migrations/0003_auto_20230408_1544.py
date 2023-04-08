@@ -16,6 +16,7 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('system_prompt', models.CharField(blank=True, help_text='시스템 프롬프트', max_length=45, null=True)),
                 ('prompt', models.TextField(help_text='프롬프트')),
+                ('summary', models.TextField(blank=True, help_text='요약', null=True)),
                 ('tag', models.CharField(blank=True, help_text='태그', max_length=45, null=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
