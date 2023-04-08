@@ -33,3 +33,4 @@ celery==5.2.7
 importlib-metadata==4.13.0
 redis==4.5.1
 PyMySQL==1.0.2
+flower==1.2.0
