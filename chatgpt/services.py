@@ -5,12 +5,13 @@ from chatgpt.consts import CHATGPT_URL, CHATGPT_HEADERS
 from chatgpt.dtos import ChatGPTConversationEntry
 
 
-def get_chatgpt_response(prompt: str, conversation_history: List[ChatGPTConversationEntry] = None) -> str:
+def get_chatgpt_response(system_prompt: str, prompt: str,
+                         conversation_history: List[ChatGPTConversationEntry] = None) -> str:
     if conversation_history is None:
         conversation_history = []
 
     messages = [
-        ChatGPTConversationEntry(role='system', content='너는 Python 시니어 개발자'),
+        {'role': 'system', 'content': system_prompt},
     ]
     for entry in conversation_history:
         messages.append({'role': entry.role, 'content': entry.content})
