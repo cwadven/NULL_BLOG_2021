@@ -1,14 +1,27 @@
 import requests
+from typing import List
+
 from chatgpt.consts import CHATGPT_URL, CHATGPT_HEADERS
+from chatgpt.dtos import ChatGPTConversationEntry
 
 
-def get_chatgpt_response(prompt):
+def get_chatgpt_response(prompt: str, conversation_history: List[ChatGPTConversationEntry] = None) -> str:
+    if conversation_history is None:
+        conversation_history = []
+
+    messages = [
+        ChatGPTConversationEntry(role='system', content='너는 Python 시니어 개발자'),
+    ]
+    for entry in conversation_history:
+        messages.append({'role': entry.role, 'content': entry.content})
+    messages.append({'role': 'user', 'content': prompt})
+
     response = requests.post(
         url=CHATGPT_URL,
         headers=CHATGPT_HEADERS,
         json={
             'model': 'gpt-3.5-turbo',
-            'messages': [{'role': 'user', 'content': prompt}],
+            'messages': messages,
         }
     )
     if response.status_code == 200:
@@ -16,4 +29,4 @@ def get_chatgpt_response(prompt):
         generated_text = response_json['choices'][0]['message']['content']
         return generated_text.strip()
     else:
-        return
+        return ''
